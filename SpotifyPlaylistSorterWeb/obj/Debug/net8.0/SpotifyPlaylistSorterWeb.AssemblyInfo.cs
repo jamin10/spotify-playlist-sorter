@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpotifyPlaylistSorterWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1746f8d0a5cd70fdfb01cd92a2cc930cb04a4a93")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6906d3c20f83df8486b2b6f279d6b80b361ff494")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpotifyPlaylistSorterWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpotifyPlaylistSorterWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -8,6 +8,8 @@ namespace SpotifyPlaylistSorterWeb.Controllers
 {
     public class SpotifyController : Controller
     {
+        string ClientId = "be0324574d3d4350aaa1763a6b25e4d9";
+
         public IActionResult Index()
         {
             return View();
@@ -15,8 +17,6 @@ namespace SpotifyPlaylistSorterWeb.Controllers
 
         public IActionResult Login()
         {
-            string ClientId = "be0324574d3d4350aaa1763a6b25e4d9";
-
             var loginRequest = new SpAPI.LoginRequest(
             new Uri("https://localhost:44314/Spotify/Callback"),
             ClientId,
@@ -38,10 +38,13 @@ namespace SpotifyPlaylistSorterWeb.Controllers
         public async Task GetCallback(string code)
         {
             var response = await new OAuthClient().RequestToken(
-              new AuthorizationCodeTokenRequest("ClientId", "ClientSecret", code, new Uri("http://localhost:44314"))
-            );
+              new AuthorizationCodeTokenRequest(ClientId, ClientSecret, code, new Uri("https://localhost:44314/Spotify/Callback")));
 
-            var spotify = new SpotifyClient(response.AccessToken);
+            var config = SpotifyClientConfig
+                .CreateDefault()
+                .WithAuthenticator(new AuthorizationCodeAuthenticator("ClientId", "ClientSecret", response));
+
+            var spotify = new SpotifyClient(config);
             // Also important for later: response.RefreshToken
         }
     }
