@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
+﻿using System.Configuration;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
 using static System.Formats.Asn1.AsnWriter;
@@ -8,7 +9,21 @@ namespace SpotifyPlaylistSorterWeb.Controllers
 {
     public class SpotifyController : Controller
     {
-        string ClientId = "be0324574d3d4350aaa1763a6b25e4d9";
+        private readonly IConfiguration _configuration;
+        
+        private readonly string? ClientId;
+
+        private readonly string? ClientSecret;
+
+        private readonly Uri? RedirectUri;
+
+        public SpotifyController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            ClientId = _configuration["SpotifyCredentials:ClientId"];
+            ClientSecret = _configuration["SpotifyCredentials:ClientSecret"];
+            RedirectUri = new Uri(_configuration["SpotifyCredentials:RedirectUri"]);
+        }
 
         public IActionResult Index()
         {
@@ -18,7 +33,7 @@ namespace SpotifyPlaylistSorterWeb.Controllers
         public IActionResult Login()
         {
             var loginRequest = new SpAPI.LoginRequest(
-            new Uri("https://localhost:44314/Spotify/Callback"),
+            RedirectUri,
             ClientId,
             SpAPI.LoginRequest.ResponseType.Code
             )
@@ -38,7 +53,7 @@ namespace SpotifyPlaylistSorterWeb.Controllers
         public async Task GetCallback(string code)
         {
             var response = await new OAuthClient().RequestToken(
-              new AuthorizationCodeTokenRequest(ClientId, ClientSecret, code, new Uri("https://localhost:44314/Spotify/Callback")));
+              new AuthorizationCodeTokenRequest(ClientId, ClientSecret, code, RedirectUri));
 
             var config = SpotifyClientConfig
                 .CreateDefault()
@@ -46,6 +61,9 @@ namespace SpotifyPlaylistSorterWeb.Controllers
 
             var spotify = new SpotifyClient(config);
             // Also important for later: response.RefreshToken
+
+            var track = await spotify.Tracks.Get("11dFghVXANMlKmJXsNCbNl");
+            Console.WriteLine(track.Name);
         }
     }
 }
