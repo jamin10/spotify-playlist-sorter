@@ -9,9 +9,12 @@ namespace SpotifyPlaylistSorterWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ISpotifyService _spotify;
+
+        public HomeController(ILogger<HomeController> logger, ISpotifyService spotifyClient)
         {
             _logger = logger;
+            _spotify = spotifyClient;
         }
 
         public IActionResult Index()
@@ -19,7 +22,7 @@ namespace SpotifyPlaylistSorterWeb.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Playlists()
         {
             return View();
         }
