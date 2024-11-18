@@ -1,9 +1,8 @@
-﻿namespace SpotifyPlaylistSorterWeb;
-
-using SpotifyAPI.Web;
+﻿using SpotifyAPI.Web;
+using SpotifyPlaylistSorterWeb.Services.Interfaces;
 using SpAPI = SpotifyAPI.Web;
 
-
+namespace SpotifyPlaylistSorterWeb.Services;
 
 public class SpotifyService : ISpotifyService
 {
@@ -17,12 +16,13 @@ public class SpotifyService : ISpotifyService
 
     private readonly Uri? RedirectUri;
 
-    public SpotifyClient? Spotify { get; set; }
+    public SpotifyClient? SpotifyClient { get; set; }
 
     public SpotifyService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        
         ClientId = _configuration["SpotifyCredentials:ClientId"];
         ClientSecret = _configuration["SpotifyCredentials:ClientSecret"];
         RedirectUri = new Uri(_configuration["SpotifyCredentials:RedirectUri"]);
@@ -42,7 +42,7 @@ public class SpotifyService : ISpotifyService
         return uri;
     }
 
-    public async Task<SpotifyClient> CreateSpotifyClient(string code)
+    public async Task CreateSpotifyClient(string code)
     {
         var response = await new SpAPI.OAuthClient().RequestToken(
         new SpAPI.AuthorizationCodeTokenRequest(ClientId, ClientSecret, code, RedirectUri));
@@ -50,9 +50,7 @@ public class SpotifyService : ISpotifyService
         var session = _httpContextAccessor.HttpContext.Session;
         session.SetString("access_token", response.AccessToken);
 
-        var Spotify = new SpotifyClient(session.GetString("access_token"));
-
-        return Spotify;
+        SpotifyClient = new SpotifyClient(session.GetString("access_token"));
 
         /*
         var config = SpAPI.SpotifyClientConfig

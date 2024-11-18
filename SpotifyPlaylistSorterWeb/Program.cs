@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using SpotifyAPI.Web;
 using SpotifyPlaylistSorterWeb;
 using SpotifyPlaylistSorterWeb.Data;
+using SpotifyPlaylistSorterWeb.Services;
+using SpotifyPlaylistSorterWeb.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,8 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<ISpotifyService, SpotifyService>();
+builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
 var app = builder.Build();
 

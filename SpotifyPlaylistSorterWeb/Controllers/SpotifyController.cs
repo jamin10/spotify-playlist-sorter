@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
+using SpotifyPlaylistSorterWeb.Services.Interfaces;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace SpotifyPlaylistSorterWeb.Controllers
@@ -34,12 +35,8 @@ namespace SpotifyPlaylistSorterWeb.Controllers
         }
         public async Task GetCallback(string code)
         {
-            var spotify = await _spotifyService.CreateSpotifyClient(code); 
+            await _spotifyService.CreateSpotifyClient(code); 
             // Also important for later: response.RefreshToken
-
-            PrivateUser userProfile = await spotify.UserProfile.Current();
-            Console.WriteLine(userProfile.DisplayName);
-            Console.WriteLine(userProfile.Type); 
         }
     }
 }

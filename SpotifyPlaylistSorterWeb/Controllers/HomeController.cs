@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyPlaylistSorterWeb.Models;
-using SpotifyAPI.Web;
+using SpotifyPlaylistSorterWeb.Services.Interfaces;
 
 namespace SpotifyPlaylistSorterWeb.Controllers
 {
@@ -9,21 +9,23 @@ namespace SpotifyPlaylistSorterWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private readonly ISpotifyService _spotify;
+        private readonly IUserProfileService _userProfileService;
 
-        public HomeController(ILogger<HomeController> logger, ISpotifyService spotifyClient)
+        public HomeController(ILogger<HomeController> logger, IUserProfileService userProfileService)
         {
             _logger = logger;
-            _spotify = spotifyClient;
+            _userProfileService = userProfileService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var viewModel = await _userProfileService.GetCurrentUserViewModel();
+            return View(viewModel);
         }
 
-        public IActionResult Playlists()
+        public async Task<IActionResult> Playlists()
         {
+            //var playlists = await _spotifyService.SpotifyClient.Playlists.CurrentUsers();
             return View();
         }
 
