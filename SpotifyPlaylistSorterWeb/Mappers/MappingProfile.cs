@@ -8,6 +8,6 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<PrivateUser, CurrentUserViewModel>();
+        CreateMap<PrivateUser, CurrentUserViewModel>(MemberList.Source);
     }
 }

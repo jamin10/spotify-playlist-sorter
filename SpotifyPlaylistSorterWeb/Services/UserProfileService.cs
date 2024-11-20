@@ -27,7 +27,7 @@ public class UserProfileService : IUserProfileService
         var userProfile = await _spotifyService.SpotifyClient.UserProfile.Current();
         if (userProfile != null)
         {
-            viewModel = _mapper.Map<CurrentUserViewModel>(userProfile);
+            _mapper.Map<CurrentUserViewModel>(userProfile);
         }
         return viewModel;
     }

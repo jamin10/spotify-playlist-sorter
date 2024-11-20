@@ -4,5 +4,5 @@ namespace SpotifyPlaylistSorterWeb.Models;
 
 public class CurrentUserViewModel : PrivateUser
 {
-    public bool IsLoggedIn { get; set; } = false;
+    public bool IsLoggedIn { get; set; }
 }
