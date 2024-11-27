@@ -31,3 +31,7 @@ body {
   width: 66%;
   height: auto;
 }
+
+.btn-spotify {
+  --bs-btn-bg: #1DB954;
+}

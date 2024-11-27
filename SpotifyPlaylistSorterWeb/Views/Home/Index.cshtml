@@ -4,8 +4,12 @@
 }
 
 <div class="main-container">
-    <h1 class="display-4">Welcome</h1>
-    <h2><a href="Spotify/login">Connect to Spotify</a></h2>
+    <h1 class="display-4">Home</h1>
+    @if (!Model.IsLoggedIn)
+    {
+        <h3>You are not connected to a Spotify account</h3>
+        <a href="Spotify/login"><button type="button" class="btn btn-success btn-spotify">Connect to Spotify</button></a>
+    }
 
     @if (Model.IsLoggedIn)
     {
@@ -17,7 +21,7 @@
             </div>
             @if (Model.Images != null)
             {
-                <img src="@Model.Images[0].Url" id="card-image" alt="User's profile picture" width="66%" height="">
+                <img src="@Model.Images[0].Url" id="card-image" alt="User's profile picture" width="50%">
             }
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Followers - @Model.Followers.Total</li>
