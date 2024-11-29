@@ -23,12 +23,6 @@ namespace SpotifyPlaylistSorterWeb.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Playlists()
-        {
-            //var playlists = await _spotifyService.SpotifyClient.Playlists.CurrentUsers();
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

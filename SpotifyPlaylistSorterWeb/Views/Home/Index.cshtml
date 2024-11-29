@@ -1,9 +1,39 @@
-﻿@{
+﻿@model SpotifyPlaylistSorterWeb.Models.CurrentUserViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <h2><a href="Spotify/login">Connect to Spotify</a></h2>
+<div class="main-container">
+    <h1 class="display-4">Home</h1>
+    @if (!Model.IsLoggedIn)
+    {
+        <h3>You are not connected to a Spotify account</h3>
+        <a href="Spotify/login"><button type="button" class="btn btn-success btn-spotify">Connect to Spotify</button></a>
+    }
+
+    @if (Model.IsLoggedIn)
+    {
+        <div class="card mb-3" style="width: 50%;">
+            <h3 class="card-header">User Profile</h3>
+            <div class="card-body">
+                <h5 class="card-title">@Model.DisplayName</h5>
+                <h6 class="card-subtitle text-muted">@Model.Id</h6>
+            </div>
+            @if (Model.Images != null)
+            {
+                <img src="@Model.Images[0].Url" id="card-image" alt="User's profile picture" width="50%">
+            }
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Followers - @Model.Followers.Total</li>
+                <li class="list-group-item">Playlists - </li>
+            </ul>
+            <div class="card-body">
+                <a href="@Model.ExternalUrls["spotify"]" class="card-link">Profile</a>
+                <a href="#" class="card-link">Sign out</a>
+            </div>
+            <div class="card-footer text-muted">
+                2 days ago
+            </div>
+        </div>
+    }
 </div>

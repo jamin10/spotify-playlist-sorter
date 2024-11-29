@@ -20,3 +20,18 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.main-container {
+  justify-content: center;
+  width: 66vw;
+}
+
+#card-image {
+  display: block;
+  width: 66%;
+  height: auto;
+}
+
+.btn-spotify {
+  --bs-btn-bg: #1DB954;
+}
