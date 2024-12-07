@@ -3,3 +3,4 @@ SpotifyPlaylistSorterWeb/obj/
 SpotifyPlaylistSorterWeb/appsettings.Development.json
 .vs
 .vscode
+.DS_Store
