@@ -15,9 +15,9 @@ public class PlaylistsController : Controller
         _playlistsService = playlistsService;
     }
 
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Current()
     {
-        var viewModel = _playlistsService.GetPlaylistsViewModel();
-        return View("Playlists");
+        var viewModel = await _playlistsService.GetPlaylistsViewModel();
+        return View(viewModel);
     }
 }

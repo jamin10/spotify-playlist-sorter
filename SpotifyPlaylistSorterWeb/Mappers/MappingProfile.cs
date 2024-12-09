@@ -19,7 +19,11 @@ public class MappingProfile : Profile
 
         CreateMap<FullPlaylist, PlaylistModel>(MemberList.Source)
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dest => dest.TracksUrl, opt => opt.MapFrom(src => src.Href));
+            .ForMember(dest => dest.TracksUrl, opt => opt.MapFrom(src => src.Href))
+            .ForAllMembers(opts =>
+            {
+                opts.Condition((src, dest, srcMember) => srcMember != null);
+            });
 
         CreateMap<Paging<PlaylistTrack<IPlayableItem>>, PlaylistModel>(MemberList.Source)
             .ForMember(dest => dest.TracksUrl, opt => opt.MapFrom(src => src.Href));
