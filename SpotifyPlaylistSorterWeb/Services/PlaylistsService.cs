@@ -16,6 +16,7 @@ public class PlaylistsService : IPlaylistsService
         _mapper = mapper;
     }
 
+    /// <inheritdoc />
     public async Task<PlaylistsViewModel> GetPlaylistsViewModel()
     {
         var viewModel = new PlaylistsViewModel();
@@ -27,6 +28,7 @@ public class PlaylistsService : IPlaylistsService
 
         var request = new PlaylistCurrentUsersRequest { Limit = 10 };
         var playlists = await _spotifyService.SpotifyClient.Playlists.CurrentUsers(request);
+        // var audioFeatures = await _spotifyService.SpotifyClient.Tracks.GetAudioFeatures("11dFghVXANMlKmJXsNCbNl");
         if (playlists != null)
         {
             _mapper.Map(playlists, viewModel);
