@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SpotifyAPI.Web;
 using SpotifyPlaylistSorterWeb;
+using SpotifyPlaylistSorterWeb.Clients.Implementations;
+using SpotifyPlaylistSorterWeb.Clients.Interfaces;
 using SpotifyPlaylistSorterWeb.Data;
 using SpotifyPlaylistSorterWeb.Mappers;
 using SpotifyPlaylistSorterWeb.Models;
@@ -30,6 +32,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<IPlaylistsService, PlaylistsService>();
+
+builder.Services.AddHttpClient<ICyaniteClient, CyaniteClient>(client =>
+{
+    client.BaseAddress = new Uri("https://api.cyanite.ai/graphql");
+    client.DefaultRequestHeaders.Authorization = 
+        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", builder.Configuration.GetValue<string>("Cyanite:AccessToken"));
+});
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
