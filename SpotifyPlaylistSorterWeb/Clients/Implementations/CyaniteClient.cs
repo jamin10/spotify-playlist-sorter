@@ -13,12 +13,13 @@ public class CyaniteClient : ICyaniteClient
         _httpClient = httpClient;
     }
 
-    public async Task<string> GetAsync(string query)
+    public async Task<string> GetAsync(string query, object? variables = null)
     {
 
         var request = new
         {
-            query
+            query,
+            variables
         };
 
         var content = new StringContent(

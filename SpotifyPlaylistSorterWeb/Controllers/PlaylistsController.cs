@@ -22,9 +22,10 @@ public class PlaylistsController : Controller
     public async Task<IActionResult> Current()
     {
         var viewModel = await _playlistsService.GetPlaylistsViewModel();
-        var query = "query SpotifyTrackQuery($spotifyTrackId: 6suVCaWE1ssKwdnLJyjyxy) {spotifyTrack(id: $spotifyTrackId) {__typename... on SpotifyTrackError {message}... on SpotifyTrack {idtitleaudioAnalysisV6 {__typename... on AudioAnalysisV6Finished {result {energyLevelenergyDynamicsbpmPrediction {valueconfidence}bpmRangeAdjusted}}}}}}";
+        var query2 = "query SpotifyTrackQuery($spotifyTrackId: ID!) { spotifyTrack(id: $spotifyTrackId) { __typename ... on SpotifyTrackError { message } ... on SpotifyTrack { id title audioAnalysisV6 { __typename ... on AudioAnalysisV6Finished { result { energyLevel energyDynamics bpmPrediction { value confidence } bpmRangeAdjusted } } } } } }";
+        var variables2 = new { spotifyTrackId = "6suVCaWE1ssKwdnLJyjyxy" };
 
-        var result = await _cyaniteClient.GetAsync(query);
+        var result = await _cyaniteClient.GetAsync(query2, variables2);
         return View(viewModel);
     }
 }
