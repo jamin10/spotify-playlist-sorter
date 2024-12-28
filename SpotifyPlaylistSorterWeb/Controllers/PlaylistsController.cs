@@ -15,9 +15,15 @@ public class PlaylistsController : Controller
         _playlistsService = playlistsService;
     }
 
-    public async Task<IActionResult> Current()
+    public async Task<IActionResult> Current(int page = 1, int pageSize = 10)
     {
-        var viewModel = await _playlistsService.GetPlaylistsViewModel();
+        var viewModel = await _playlistsService.GetPlaylistsViewModel(page, pageSize);
+        return View(viewModel);
+    }
+
+    public async Task<IActionResult> ViewPlaylist()
+    {
+        var viewModel = await _playlistsService.GetFullPlaylistViewModel();
         return View(viewModel);
     }
 }

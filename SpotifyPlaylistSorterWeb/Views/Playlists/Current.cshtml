@@ -1,4 +1,4 @@
-﻿@model SpotifyPlaylistSorterWeb.Models.PlaylistsViewModel;
+﻿@model PlaylistsViewModel;
 @{
     ViewData["Title"] = "User Playlists";
 }
@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var item in Model.Playlists)
+            @foreach(var item in Model.Playlists.Items)
             {
                 @if(item is null)
                 {

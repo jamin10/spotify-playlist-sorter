@@ -1,6 +1,6 @@
 namespace SpotifyPlaylistSorterWeb.Models;
 
-public class PlaylistModel
+public class FullPlaylistModel
 {
     public string? Name { get; set; }
 
@@ -11,4 +11,6 @@ public class PlaylistModel
     public string? TracksUrl { get; set; }
 
     public int TracksTotal { get; set; }
+
+    //public PaginatedList<TrackModel>? Tracks { get; set; }
 }

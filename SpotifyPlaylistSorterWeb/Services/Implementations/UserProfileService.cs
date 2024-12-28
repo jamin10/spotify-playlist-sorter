@@ -2,7 +2,7 @@ using AutoMapper;
 using SpotifyPlaylistSorterWeb.Models;
 using SpotifyPlaylistSorterWeb.Services.Interfaces;
 
-namespace SpotifyPlaylistSorterWeb.Services;
+namespace SpotifyPlaylistSorterWeb.Services.Implementations;
 
 public class UserProfileService : IUserProfileService
 {

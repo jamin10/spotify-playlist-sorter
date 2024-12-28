@@ -2,7 +2,7 @@
 using SpotifyPlaylistSorterWeb.Services.Interfaces;
 using SpAPI = SpotifyAPI.Web;
 
-namespace SpotifyPlaylistSorterWeb.Services;
+namespace SpotifyPlaylistSorterWeb.Services.Implementations;
 
 public class SpotifyService : ISpotifyService
 {

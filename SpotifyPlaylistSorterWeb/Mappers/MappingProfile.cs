@@ -11,13 +11,15 @@ public class MappingProfile : Profile
     {
         CreateMap<PrivateUser, CurrentUserViewModel>(MemberList.Source);
 
-        CreateMap<Paging<FullPlaylist>, PlaylistsViewModel>(MemberList.Source)
-            .ForMember(dest => dest.NextPage, opt => opt.MapFrom(src => src.Next))
-            .ForMember(dest => dest.PrevPage, opt => opt.MapFrom(src => src.Previous))
-            .ForMember(dest => dest.TotalPlaylists, opt => opt.MapFrom(src => src.Total))
-            .ForMember(dest => dest.Playlists, opt => opt.MapFrom(src => src.Items));
+        CreateMap<Paging<FullPlaylist>, PaginatedList<FullPlaylistModel>>(MemberList.Source);
+            //.ForMember(dest => dest.NextPage, opt => opt.MapFrom(src => src.Next))
+            //.ForMember(dest => dest.PrevPage, opt => opt.MapFrom(src => src.Previous))
+            //.ForMember(dest => dest.TotalResults, opt => opt.MapFrom(src => src.Total));
+            //.ForMember(dest => dest.Playlists, opt => opt.MapFrom(src => src.Items));
 
-        CreateMap<FullPlaylist, PlaylistModel>(MemberList.Source)
+        //CreateMap<Paging<PlaylistTrack>, PaginatedList<TrackModel>>()
+
+        CreateMap<FullPlaylist, FullPlaylistModel>(MemberList.Source)
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.TracksUrl, opt => opt.MapFrom(src => src.Href))
             .ForAllMembers(opts =>
@@ -25,7 +27,7 @@ public class MappingProfile : Profile
                 opts.Condition((src, dest, srcMember) => srcMember != null);
             });
 
-        CreateMap<Paging<PlaylistTrack<IPlayableItem>>, PlaylistModel>(MemberList.Source)
+        CreateMap<Paging<PlaylistTrack<IPlayableItem>>, FullPlaylistModel>(MemberList.Source)
             .ForMember(dest => dest.TracksUrl, opt => opt.MapFrom(src => src.Href));
     }
 }
