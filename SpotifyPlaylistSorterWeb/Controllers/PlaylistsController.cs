@@ -21,7 +21,7 @@ public class PlaylistsController : Controller
         return View(viewModel);
     }
 
-    public async Task<IActionResult> ViewPlaylist()
+    public async Task<IActionResult> ViewPlaylist(string id)
     {
         var viewModel = await _playlistsService.GetFullPlaylistViewModel();
         return View(viewModel);

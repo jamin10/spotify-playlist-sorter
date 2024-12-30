@@ -12,16 +12,13 @@ public class MappingProfile : Profile
         CreateMap<PrivateUser, CurrentUserViewModel>(MemberList.Source);
 
         CreateMap<Paging<FullPlaylist>, PaginatedList<FullPlaylistModel>>(MemberList.Source);
-            //.ForMember(dest => dest.NextPage, opt => opt.MapFrom(src => src.Next))
-            //.ForMember(dest => dest.PrevPage, opt => opt.MapFrom(src => src.Previous))
-            //.ForMember(dest => dest.TotalResults, opt => opt.MapFrom(src => src.Total));
-            //.ForMember(dest => dest.Playlists, opt => opt.MapFrom(src => src.Items));
 
         //CreateMap<Paging<PlaylistTrack>, PaginatedList<TrackModel>>()
 
         CreateMap<FullPlaylist, FullPlaylistModel>(MemberList.Source)
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.TracksUrl, opt => opt.MapFrom(src => src.Href))
+            .ForMember(dest => dest.SpotifyId, opt => opt.MapFrom(src => src.Id))
             .ForAllMembers(opts =>
             {
                 opts.Condition((src, dest, srcMember) => srcMember != null);

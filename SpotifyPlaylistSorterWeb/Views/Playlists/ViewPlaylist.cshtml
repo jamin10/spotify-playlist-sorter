@@ -1,4 +1,4 @@
-﻿@model PlaylistsViewModel;
+@model FullPlaylistViewModel;
 @{
     ViewData["Title"] = "User Playlists";
 }
@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var item in Model.Playlists.Items)
+            @foreach(var item in Model.Tracks.Items)
             {
                 @if(item is null)
                 {
@@ -34,9 +34,6 @@
                 <tr class="table-active">
                 <th scope="row"></th>
                 <td>@item.Name</td>
-                <td>@item.Description</td>
-                <td>@item.TracksTotal</td>
-                <td><a href="ViewPlaylist/@item.SpotifyId">View</a></td>
                 </tr>
             }
         </tbody>

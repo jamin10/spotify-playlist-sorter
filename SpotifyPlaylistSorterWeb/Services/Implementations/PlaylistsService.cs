@@ -49,6 +49,8 @@ public class PlaylistsService : IPlaylistsService
         {
             return viewModel;
         }
+        viewModel.IsLoggedIn = true;
+
         return viewModel;
     }
 }
