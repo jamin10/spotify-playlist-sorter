@@ -15,5 +15,5 @@ public interface IPlaylistsService
     /// Get the view model for the Playlist View page.
     /// </summary>
     /// <returns>A view model.</returns>
-    public Task<FullPlaylistViewModel> GetFullPlaylistViewModel();
+    public Task<FullPlaylistViewModel> GetFullPlaylistViewModel(string playlistId);
 }

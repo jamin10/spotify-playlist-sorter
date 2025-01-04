@@ -42,7 +42,7 @@ public class PlaylistsService : IPlaylistsService
         return viewModel;
     }
 
-    public async Task<FullPlaylistViewModel> GetFullPlaylistViewModel()
+    public async Task<FullPlaylistViewModel> GetFullPlaylistViewModel(string playlistId)
     {
         var viewModel = new FullPlaylistViewModel();
         if (_spotifyService.SpotifyClient == null)
@@ -50,6 +50,13 @@ public class PlaylistsService : IPlaylistsService
             return viewModel;
         }
         viewModel.IsLoggedIn = true;
+
+        var playlist = await _spotifyService.SpotifyClient.Playlists.GetItems(playlistId);
+
+        if (playlist != null)
+        {
+            _mapper.Map(playlist, viewModel.Tracks);
+        }
 
         return viewModel;
     }

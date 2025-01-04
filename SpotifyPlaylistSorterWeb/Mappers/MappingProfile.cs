@@ -1,5 +1,6 @@
 using AutoMapper;
 using AutoMapper.Execution;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using SpotifyAPI.Web;
 using SpotifyPlaylistSorterWeb.Models;
 
@@ -9,11 +10,18 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap(typeof(Paging<>), typeof(PaginatedList<>));
+
         CreateMap<PrivateUser, CurrentUserViewModel>(MemberList.Source);
 
-        CreateMap<Paging<FullPlaylist>, PaginatedList<FullPlaylistModel>>(MemberList.Source);
+        CreateMap<FullTrack, TrackModel>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
 
-        //CreateMap<Paging<PlaylistTrack>, PaginatedList<TrackModel>>()
+        CreateMap<IPlayableItem, TrackModel>()
+            .Include<FullTrack, TrackModel>();
+
+        CreateMap<PlaylistTrack<IPlayableItem>, TrackModel>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => ((FullTrack)src.Track).Name));
 
         CreateMap<FullPlaylist, FullPlaylistModel>(MemberList.Source)
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -24,7 +32,7 @@ public class MappingProfile : Profile
                 opts.Condition((src, dest, srcMember) => srcMember != null);
             });
 
-        CreateMap<Paging<PlaylistTrack<IPlayableItem>>, FullPlaylistModel>(MemberList.Source)
-            .ForMember(dest => dest.TracksUrl, opt => opt.MapFrom(src => src.Href));
+        //CreateMap<Paging<PlaylistTrack<IPlayableItem>>, FullPlaylistModel>(MemberList.Source)
+        //    .ForMember(dest => dest.TracksUrl, opt => opt.MapFrom(src => src.Href));
     }
 }

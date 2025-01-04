@@ -23,7 +23,7 @@ public class PlaylistsController : Controller
 
     public async Task<IActionResult> ViewPlaylist(string id)
     {
-        var viewModel = await _playlistsService.GetFullPlaylistViewModel();
+        var viewModel = await _playlistsService.GetFullPlaylistViewModel(id);
         return View(viewModel);
     }
 }
