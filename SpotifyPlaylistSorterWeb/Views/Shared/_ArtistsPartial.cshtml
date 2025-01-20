@@ -1,0 +1,3 @@
+@model List<ArtistModel>
+
+@string.Join(", ", Model.Select(artist => artist.Name))

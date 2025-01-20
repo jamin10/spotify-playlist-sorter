@@ -20,8 +20,14 @@ public class MappingProfile : Profile
         CreateMap<IPlayableItem, TrackModel>()
             .Include<FullTrack, TrackModel>();
 
+        CreateMap<SimpleArtist, ArtistModel>()
+            .ForMember(dest => dest.SpotifyArtistId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
         CreateMap<PlaylistTrack<IPlayableItem>, TrackModel>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => ((FullTrack)src.Track).Name));
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => ((FullTrack)src.Track).Name))
+            .ForMember(dest => dest.SpotifyTrackId, opt => opt.MapFrom(src => ((FullTrack)src.Track).Id))
+            .ForMember(dest => dest.Artists, opt => opt.MapFrom(src => ((FullTrack)src.Track).Artists));
 
         CreateMap<FullPlaylist, FullPlaylistModel>(MemberList.Source)
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))

@@ -19,6 +19,7 @@ Usage of this app requires connecting to the Spotify Developer API and the Cyani
     "ClientId": "{CLIENT_ID}",
     "ClientSecret": "{CLIENT_SECRET}",
     "RedirectUri": "{REDIRECT_URI}"
+}
 ```
 ### Cyanite API
 1. Register for a [Cyantie API](https://app.cyanite.ai/register) account

@@ -19,9 +19,7 @@
             <tr>
             <th scope="col"></th>
             <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Tracks</th>
-            <th scope="col">Action</th>
+            <th scope="col">Artist</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +32,7 @@
                 <tr class="table-active">
                 <th scope="row"></th>
                 <td>@item.Name</td>
+                <td>@await Html.PartialAsync("_ArtistsPartial", item.Artists)</td>
                 </tr>
             }
         </tbody>
