@@ -41,4 +41,7 @@
             }
         </tbody>
     </table>
+
+    @Model.Playlists.Next
+    @await Html.PartialAsync("_PaginationPartial", Model.Playlists)
 }
