@@ -1,12 +1,27 @@
 @model dynamic
 
+@{
+  var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+  var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
 <div>
   <ul class="pagination">
-    <li class="page-item disabled">
-      <a class="page-link" href="">&laquo;</a>
+    <li class="page-item @prevDisabled">
+      <a asp-action="Current"
+        asp-route-page="@(Model.Index - 1)"
+        asp-route-pageSize="@(Model.Limit)"
+        class="page-link @prevDisabled">
+          Previous
+      </a>
     </li>
-    <li class="page-item active">
-      <a class="page-link" href=@Model.Next>1</a>
+    <li class="page-item @nextDisabled">
+      <a asp-action="Current"
+        asp-route-page="@(Model.Index + 1)"
+        asp-route-pageSize="@(Model.Limit)"
+        class="page-link @nextDisabled">
+          Next
+      </a>
     </li>
   </ul>
 </div>

@@ -2,5 +2,13 @@ namespace SpotifyPlaylistSorterWeb.Models;
 
 public class PlaylistsViewModel : SpotifyBaseViewModel
 {
-    public PaginatedList<FullPlaylistModel> Playlists { get; set; } = new PaginatedList<FullPlaylistModel>();
+    public PlaylistsViewModel(int page, int pageSize)
+    {
+        Playlists = new PaginatedList<FullPlaylistModel>
+        {
+            Index = page,
+            Limit = pageSize
+        };
+    }
+    public PaginatedList<FullPlaylistModel> Playlists { get; set; }
 }

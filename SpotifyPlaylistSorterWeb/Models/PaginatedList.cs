@@ -6,7 +6,9 @@ public class PaginatedList<T> : List<T>
 
     public List<T>? Items { get; set; }
 
-    public int? Limit { get; set; }
+    public int Index { get; set; }
+
+    public int Limit { get; set; }
 
     public string? Next { get; set; }
 
@@ -14,5 +16,11 @@ public class PaginatedList<T> : List<T>
 
     public string? Previous { get; set; }
 
-    public int? Total { get; set; }
+    public int Total { get; set; }
+
+    public int TotalPages => Total / Limit;
+
+    public bool HasPreviousPage => Index > 1;
+
+    public bool HasNextPage => Index < TotalPages;
 }

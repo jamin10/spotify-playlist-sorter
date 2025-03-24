@@ -20,7 +20,7 @@ public class PlaylistsService : IPlaylistsService
     /// <inheritdoc />
     public async Task<PlaylistsViewModel> GetPlaylistsViewModel(int page, int pageSize)
     {
-        var viewModel = new PlaylistsViewModel();
+        var viewModel = new PlaylistsViewModel(page, pageSize);
         if (_spotifyService.SpotifyClient == null)
         {
             return viewModel;
