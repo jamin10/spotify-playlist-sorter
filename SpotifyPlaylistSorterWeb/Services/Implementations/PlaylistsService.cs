@@ -42,9 +42,9 @@ public class PlaylistsService : IPlaylistsService
         return viewModel;
     }
 
-    public async Task<FullPlaylistViewModel> GetFullPlaylistViewModel(string playlistId)
+    public async Task<FullPlaylistViewModel> GetFullPlaylistViewModel(string playlistId, int page, int pageSize)
     {
-        var viewModel = new FullPlaylistViewModel();
+        var viewModel = new FullPlaylistViewModel(playlistId, page, pageSize);
         if (_spotifyService.SpotifyClient == null)
         {
             return viewModel;

@@ -7,7 +7,8 @@ public class PlaylistsViewModel : SpotifyBaseViewModel
         Playlists = new PaginatedList<FullPlaylistModel>
         {
             Index = page,
-            Limit = pageSize
+            Limit = pageSize,
+            Action = "Current"
         };
     }
     public PaginatedList<FullPlaylistModel> Playlists { get; set; }

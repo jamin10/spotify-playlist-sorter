@@ -1,14 +1,24 @@
-@model dynamic
+@model IPaginatedList
 
 @{
   var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
   var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+  var baseRouteValues = new RouteValueDictionary();
+
+  if (Model.RouteValues != null)
+  {
+    foreach(var value in Model.RouteValues)
+    {
+      baseRouteValues[value.Key] = value.Value;
+    }
+  }
 }
 
 <div>
   <ul class="pagination">
     <li class="page-item @prevDisabled">
-      <a asp-action="Current"
+      <a asp-action="@Model.Action"
+        asp-all-route-data="@Model.RouteValues"
         asp-route-page="@(Model.Index - 1)"
         asp-route-pageSize="@(Model.Limit)"
         class="page-link @prevDisabled">
@@ -16,7 +26,8 @@
       </a>
     </li>
     <li class="page-item @nextDisabled">
-      <a asp-action="Current"
+      <a asp-action="@Model.Action"
+        asp-all-route-data="@Model.RouteValues"
         asp-route-page="@(Model.Index + 1)"
         asp-route-pageSize="@(Model.Limit)"
         class="page-link @nextDisabled">

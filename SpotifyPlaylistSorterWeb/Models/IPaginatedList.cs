@@ -1,14 +1,12 @@
 namespace SpotifyPlaylistSorterWeb.Models;
 
-public class PaginatedList<T> : List<T>, IPaginatedList
+public interface IPaginatedList
 {
     public string? Action { get; set; }
 
-    public Dictionary<string, string>? RouteValues { get; set; }
+    Dictionary<string, string>? RouteValues { get; }
     
     public string? Href { get; set; }
-
-    public List<T>? Items { get; set; }
 
     public int Index { get; set; }
 
