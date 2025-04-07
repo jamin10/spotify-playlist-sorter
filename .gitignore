@@ -3,6 +3,7 @@ SpotifyPlaylistSorterWeb/obj/
 TrackAnalysisWorker/bin/
 TrackAnalysisWorker/obj/
 SpotifyPlaylistSorterWeb/appsettings.Development.json
+TrackAnalysisWorker/appsettings.Development.json
 .vs
 .vscode
 .DS_Store
