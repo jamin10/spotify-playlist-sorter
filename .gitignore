@@ -1,5 +1,7 @@
 SpotifyPlaylistSorterWeb/bin/
 SpotifyPlaylistSorterWeb/obj/
+TrackAnalysisWorker/bin/
+TrackAnalysisWorker/obj/
 SpotifyPlaylistSorterWeb/appsettings.Development.json
 .vs
 .vscode
