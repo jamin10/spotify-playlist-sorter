@@ -15,28 +15,29 @@ public class CyaniteClient : ICyaniteClient
 
     public async Task<string> GetAsync(string query, object? variables = null)
     {
-
-        var request = new
+        var requestBody = new
         {
             query,
             variables
         };
 
         var content = new StringContent(
-            JsonSerializer.Serialize(request),
+            JsonSerializer.Serialize(requestBody),
             Encoding.UTF8,
             "application/json"
         );
 
-        var response = await _httpClient.PostAsync("", content);
+        var response = await _httpClient.PostAsync("https://api.cyanite.ai/graphql", content);
 
         if (!response.IsSuccessStatusCode)
         {
             var errorContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(errorContent);
             throw new HttpRequestException($"GraphQL query failed: {errorContent}");
         }
 
         var responseContent = await response.Content.ReadAsStringAsync();
+        
         var result = JsonSerializer.Deserialize<string>(responseContent, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true

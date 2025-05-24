@@ -16,5 +16,6 @@
     <Folder Include="Clients/" />
     <Folder Include="Clients/Implementations/" />
     <Folder Include="Clients/Interfaces/" />
+    <Folder Include="Services/" />
   </ItemGroup>
 </Project>
