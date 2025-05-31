@@ -1,5 +1,6 @@
-using System.Threading.Tasks;
+using System.Text.Json;
 using TrackAnalysisWorker.Clients.Interfaces;
+using TrackAnalysisWorker.Models;
 
 namespace TrackAnalysisWorker.Services;
 
@@ -41,6 +42,11 @@ public class TrackAnalyserService : IAnalyserService
         var variables = new { id = spotifyTrackId };
 
         var response = await _cyaniteClient.GetAsync(query, variables);
+
+        var result = JsonSerializer.Deserialize<CyaniteTrack>(response, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
 
         return true;
     }

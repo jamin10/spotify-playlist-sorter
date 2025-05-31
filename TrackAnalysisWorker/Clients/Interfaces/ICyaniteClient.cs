@@ -1,3 +1,5 @@
+using TrackAnalysisWorker.Models;
+
 namespace TrackAnalysisWorker.Clients.Interfaces;
 
 public interface ICyaniteClient

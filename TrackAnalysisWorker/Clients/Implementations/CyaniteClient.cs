@@ -37,12 +37,7 @@ public class CyaniteClient : ICyaniteClient
         }
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        
-        var result = JsonSerializer.Deserialize<string>(responseContent, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
-        
-        return result;
+    
+        return responseContent;
     }
 }
