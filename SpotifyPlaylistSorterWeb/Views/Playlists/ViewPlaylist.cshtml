@@ -1,6 +1,10 @@
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery IAntiforgery
+
 @model FullPlaylistViewModel;
 @{
+    var antiForgeryToken = IAntiforgery.GetAndStoreTokens(Context).RequestToken;
     ViewData["Title"] = "User Playlists";
+    var playlistId = Model.Tracks.RouteValues["id"];
 }
 <h1>@ViewData["Title"]</h1>
 
@@ -14,25 +18,27 @@
 
 @if (Model.IsLoggedIn)
 {
+    <button type="button" class="btn btn-success btn-spotify"
+        onclick="queuePlaylist('@playlistId', '@antiForgeryToken')">Analyse</button>
     <table class="table table-hover">
         <thead>
             <tr>
-            <th scope="col"></th>
-            <th scope="col">Name</th>
-            <th scope="col">Artist</th>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Artist</th>
             </tr>
         </thead>
         <tbody>
-            @foreach(var item in Model.Tracks.Items)
+            @foreach (var item in Model.Tracks.Items)
             {
-                @if(item is null)
+                @if (item is null)
                 {
                     continue;
                 }
                 <tr class="table-active">
-                <th scope="row"></th>
-                <td>@item.Name</td>
-                <td>@await Html.PartialAsync("_ArtistsPartial", item.Artists)</td>
+                    <th scope="row"></th>
+                    <td>@item.Name</td>
+                    <td>@await Html.PartialAsync("_ArtistsPartial", item.Artists)</td>
                 </tr>
             }
         </tbody>
