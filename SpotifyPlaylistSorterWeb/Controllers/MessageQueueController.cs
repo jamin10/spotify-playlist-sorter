@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
+using SpotifyPlaylistSorterWeb.Services.Interfaces;
 
 namespace SpotifyPlaylistSorterWeb.Controllers
 {
     public class MessageQueueController : Controller
     {
-        public MessageQueueController()
+        private readonly IMessageQueueService _messageQueueService;
+
+        public MessageQueueController(IMessageQueueService messageQueueService)
         {
+            _messageQueueService = messageQueueService;
         }
 
         [HttpPost]
@@ -17,8 +21,8 @@ namespace SpotifyPlaylistSorterWeb.Controllers
                 return BadRequest(new { success = false, message = "Playlist ID is required." });
             }
 
-            // TODO: Add logic to send the playlistId to your queue/message bus here.
-
+            _messageQueueService.SendMessage(playlistId);
+            
             return Json(new { success = true, message = "Playlist queued for analysis." });
         }
     }

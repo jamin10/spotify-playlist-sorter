@@ -31,6 +31,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<IPlaylistsService, PlaylistsService>();
+builder.Services.AddScoped<IMessageQueueService, RabbitMQService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
