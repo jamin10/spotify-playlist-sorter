@@ -38,20 +38,20 @@ public class Worker : BackgroundService
                                   arguments: null);
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.ReceivedAsync += static async (sender, eventArgs) =>
+            consumer.ReceivedAsync += async (sender, eventArgs) =>
             {
                 byte[] body = eventArgs.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                Console.WriteLine($" [x] Received: {message}");
+                _logger.LogInformation(" [x] Received: {message}", message);
+
+                await _analyserService.Analyse(message);
 
                 await ((AsyncDefaultBasicConsumer)sender).Channel.BasicAckAsync(eventArgs.DeliveryTag, multiple: false);
             };
 
-            await _channel.BasicConsumeAsync(queue: "message",
+            var message = await _channel.BasicConsumeAsync(queue: "message",
                                   autoAck: false,
                                   consumer: consumer);
-
-            _analyserService.Analyse("id");
         }
     }
 }

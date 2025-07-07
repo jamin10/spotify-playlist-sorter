@@ -37,9 +37,9 @@ public class TrackAnalyserService : IAnalyserService
                                     bpmRangeAdjusted
                                     }}}}}}";
 
-        var spotifyTrackId = "6suVCaWE1ssKwdnLJyjyxy";
+        //var spotifyTrackId = "6suVCaWE1ssKwdnLJyjyxy";
 
-        var variables = new { id = spotifyTrackId };
+        var variables = new { id = id };
 
         var response = await _cyaniteClient.GetAsync(query, variables);
 
