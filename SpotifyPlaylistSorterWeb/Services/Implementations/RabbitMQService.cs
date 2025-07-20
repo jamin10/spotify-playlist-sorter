@@ -13,7 +13,7 @@ public class RabbitMQService : IMessageQueueService
         _logger = logger;
     }
 
-    public async Task SendMessage(string playlistId)
+    public async Task SendMessage(string message)
     {
         var factory = new ConnectionFactory
         {
@@ -31,7 +31,6 @@ public class RabbitMQService : IMessageQueueService
             arguments: null
         );
 
-        var message = $"6suVCaWE1ssKwdnLJyjyxy";
         var body = System.Text.Encoding.UTF8.GetBytes(message);
 
         await channel.BasicPublishAsync(
