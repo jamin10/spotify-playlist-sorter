@@ -76,27 +76,48 @@ public class PlaylistsService : IPlaylistsService
 
     public async Task<bool> AnalysePlaylist(string id)
     {
-        if (_spotifyService.SpotifyClient == null) { return false; }
+        if (_spotifyService.SpotifyClient == null) return false;
 
-        var request = new PlaylistGetItemsRequest
-        {
-            Limit = 10,
-            Offset = 0
-        };
+        var allTrackIds = GetAllTrackIds(id);
 
-        var tracks = await _spotifyService.SpotifyClient.Playlists.GetItems(id, request);
-        var trackIds = tracks.Items.Select(t => ((FullTrack)t.Track).Id).ToList();
-        var message = new AnalysePlaylist(id, trackIds);
-
-        await _messageQueueService.SendMessage(JsonSerializer.Serialize(message));
-
-        while (tracks.Next != null)
-        {
-            request.Offset += 10;
-            tracks = await _spotifyService.SpotifyClient.Playlists.GetItems(id, request);
-        }
+        await QueueTracksForAnalysis(id, allTrackIds);
 
         return true;
+    }
+
+    private List<string> GetAllTrackIds(string playlistId)
+    {
+        var allTrackIds = new List<string>();
+        var request = new PlaylistGetItemsRequest { Limit = 100, Offset = 0 };
+        Paging<PlaylistTrack<IPlayableItem>> tracks;
+
+        do
+        {
+            tracks = _spotifyService.SpotifyClient.Playlists.GetItems(playlistId, request).Result;
+            if (tracks?.Items == null) break;
+
+            allTrackIds.AddRange(
+                tracks.Items
+                    .Select(t => t.Track as FullTrack)
+                    .Where(ft => ft != null)
+                    .Select(ft => ft.Id)
+            );
+
+            request.Offset += request.Limit;
+        }
+        while (tracks.Next != null);
+
+        return allTrackIds;
+    }
+
+    private async Task QueueTracksForAnalysis(string playlistId, List<string> allTrackIds)
+    {
+        for (int i = 0; i < allTrackIds.Count; i += 10)
+        {
+            var batch = allTrackIds.Skip(i).Take(10).ToList();
+            var message = new AnalysePlaylist(playlistId, batch);
+            await _messageQueueService.SendMessage(JsonSerializer.Serialize(message));
+        }
     }
         
 }

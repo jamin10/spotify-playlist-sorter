@@ -26,7 +26,7 @@ namespace SpotifyPlaylistSorterWeb.Controllers
             }
 
             var result = _playlistService.AnalysePlaylist(playlistId);
-            _messageQueueService.SendMessage(playlistId);
+            //_messageQueueService.SendMessage(playlistId);
             
             return Json(new { success = true, message = "Playlist queued for analysis." });
         }
