@@ -1,4 +1,5 @@
 using System.Text.Json;
+using SpotifyPlaylistSorterWeb.Models.QueueMessages;
 using TrackAnalysisWorker.Clients.Interfaces;
 using TrackAnalysisWorker.Models;
 
@@ -12,7 +13,7 @@ public class TrackAnalyserService : IAnalyserService
     {
         _cyaniteClient = cyaniteClient;
     }
-    public async Task<bool> Analyse(string id)
+    public async Task<bool> Analyse(AnalysePlaylist message)
     {
         var query = @"
             query SpotifyTrackQuery($id: ID!) {
@@ -39,7 +40,7 @@ public class TrackAnalyserService : IAnalyserService
 
         //var spotifyTrackId = "6suVCaWE1ssKwdnLJyjyxy";
 
-        var variables = new { id = id };
+        var variables = new { id = message.TrackIds.First() };
 
         var response = await _cyaniteClient.GetAsync(query, variables);
 

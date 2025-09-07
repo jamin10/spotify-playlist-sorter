@@ -1,6 +1,8 @@
 using System.Text;
+using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using SpotifyPlaylistSorterWeb.Models.QueueMessages;
 using TrackAnalysisWorker.Services;
 
 namespace TrackAnalysisWorker;
@@ -41,7 +43,8 @@ public class Worker : BackgroundService
             consumer.ReceivedAsync += async (sender, eventArgs) =>
             {
                 byte[] body = eventArgs.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
+                var messageBody = Encoding.UTF8.GetString(body);
+                var message = JsonSerializer.Deserialize<AnalysePlaylist>(messageBody);
                 _logger.LogInformation(" [x] Received: {message}", message);
 
                 await _analyserService.Analyse(message);

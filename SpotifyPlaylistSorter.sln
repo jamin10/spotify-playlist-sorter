@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyPlaylistSorterWeb", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackAnalysisWorker", "TrackAnalysisWorker\TrackAnalysisWorker.csproj", "{1A0CEB03-5204-4E4A-8EC4-DAC704C7DACD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{C66FCBC3-B3F4-4E22-940A-4C822CCEAC31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1A0CEB03-5204-4E4A-8EC4-DAC704C7DACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A0CEB03-5204-4E4A-8EC4-DAC704C7DACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A0CEB03-5204-4E4A-8EC4-DAC704C7DACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C66FCBC3-B3F4-4E22-940A-4C822CCEAC31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C66FCBC3-B3F4-4E22-940A-4C822CCEAC31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C66FCBC3-B3F4-4E22-940A-4C822CCEAC31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C66FCBC3-B3F4-4E22-940A-4C822CCEAC31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

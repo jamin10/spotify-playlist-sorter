@@ -1,0 +1,12 @@
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/bin/Debug/net8.0/Common.deps.json
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/bin/Debug/net8.0/Common.dll
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/bin/Debug/net8.0/Common.pdb
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/Common.GeneratedMSBuildEditorConfig.editorconfig
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/Common.AssemblyInfoInputs.cache
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/Common.AssemblyInfo.cs
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/Common.csproj.CoreCompileInputs.cache
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/Common.sourcelink.json
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/Common.dll
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/refint/Common.dll
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/Common.pdb
+/Users/benwhitfield/workspace/spotify-playlist-sorter/Common/obj/Debug/net8.0/ref/Common.dll

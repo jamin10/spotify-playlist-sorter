@@ -20,4 +20,8 @@
     <Folder Include="Models/" />
     <Folder Include="Services/" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Common/Common.csproj" />
+  </ItemGroup>
 </Project>

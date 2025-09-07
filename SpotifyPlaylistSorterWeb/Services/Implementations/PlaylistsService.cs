@@ -1,6 +1,5 @@
 using System.Text.Json;
 using AutoMapper;
-using Azure;
 using SpotifyAPI.Web;
 using SpotifyPlaylistSorterWeb.Models;
 using SpotifyPlaylistSorterWeb.Models.QueueMessages;
