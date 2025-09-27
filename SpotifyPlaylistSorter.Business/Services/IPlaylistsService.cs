@@ -1,7 +1,6 @@
-using Azure;
-using SpotifyPlaylistSorterWeb.Models;
+using SpotifyPlaylistSorter.Business.Models;
 
-namespace SpotifyPlaylistSorterWeb.Services.Interfaces;
+namespace SpotifyPlaylistSorter.Business.Services;
 
 public interface IPlaylistsService
 {

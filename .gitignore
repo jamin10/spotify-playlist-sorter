@@ -1,7 +1,13 @@
 SpotifyPlaylistSorterWeb/bin/
 SpotifyPlaylistSorterWeb/obj/
+SpotifyPlaylistSorter.Business/bin/
+SpotifyPlaylistSorter.Business/obj/
+SpotifyPlaylistSorter.Domain/bin/
+SpotifyPlaylistSorter.Domain/obj/
 TrackAnalysisWorker/bin/
 TrackAnalysisWorker/obj/
+Common/bin/
+Common/obj/
 SpotifyPlaylistSorterWeb/appsettings.Development.json
 TrackAnalysisWorker/appsettings.Development.json
 .vs

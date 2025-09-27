@@ -1,8 +1,8 @@
-using SpotifyAPI.Web;
+// using SpotifyAPI.Web;
 
-namespace SpotifyPlaylistSorterWeb.Models;
+// namespace SpotifyPlaylistSorterWeb.Models;
 
-public class CurrentUserViewModel : PrivateUser
-{
-    public bool IsLoggedIn { get; set; }
-}
+// public class CurrentUserViewModel : PrivateUser
+// {
+//     public bool IsLoggedIn { get; set; }
+// }

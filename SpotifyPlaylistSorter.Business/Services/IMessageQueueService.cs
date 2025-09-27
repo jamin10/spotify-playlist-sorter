@@ -1,4 +1,4 @@
-namespace SpotifyPlaylistSorterWeb.Services.Interfaces;
+namespace SpotifyPlaylistSorter.Business.Services;
 
 public interface IMessageQueueService
 {

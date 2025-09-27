@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SpotifyPlaylistSorterWeb.Services.Interfaces;
-
+using SpotifyPlaylistSorter.Business.Services;
 namespace SpotifyPlaylistSorterWeb.Controllers
 {
     public class MessageQueueController : Controller

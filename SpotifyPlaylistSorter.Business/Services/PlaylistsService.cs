@@ -1,11 +1,10 @@
 using System.Text.Json;
 using AutoMapper;
 using SpotifyAPI.Web;
-using SpotifyPlaylistSorterWeb.Models;
+using SpotifyPlaylistSorter.Business.Models;
 using SpotifyPlaylistSorterWeb.Models.QueueMessages;
-using SpotifyPlaylistSorterWeb.Services.Interfaces;
 
-namespace SpotifyPlaylistSorterWeb.Services.Implementations;
+namespace SpotifyPlaylistSorter.Business.Services;
 
 public class PlaylistsService : IPlaylistsService
 {

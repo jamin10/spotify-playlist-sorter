@@ -1,7 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using SpotifyPlaylistSorter.Business.Models;
+using SpotifyPlaylistSorter.Business.Services;
 using SpotifyPlaylistSorterWeb.Models;
-using SpotifyPlaylistSorterWeb.Services.Interfaces;
 
 namespace SpotifyPlaylistSorterWeb.Controllers
 {

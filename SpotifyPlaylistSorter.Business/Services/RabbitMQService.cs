@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using RabbitMQ.Client;
-using SpotifyPlaylistSorterWeb.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 
-namespace SpotifyPlaylistSorterWeb.Services.Implementations;
+namespace SpotifyPlaylistSorter.Business.Services;
 
 public class RabbitMQService : IMessageQueueService
 {

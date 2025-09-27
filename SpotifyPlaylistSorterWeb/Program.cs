@@ -1,13 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SpotifyAPI.Web;
-using SpotifyPlaylistSorterWeb;
+using SpotifyPlaylistSorter.Business.Services;
 using SpotifyPlaylistSorterWeb.Data;
 using SpotifyPlaylistSorterWeb.Mappers;
-using SpotifyPlaylistSorterWeb.Models;
-using SpotifyPlaylistSorterWeb.Services;
-using SpotifyPlaylistSorterWeb.Services.Interfaces;
-using SpotifyPlaylistSorterWeb.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 

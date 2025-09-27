@@ -1,6 +1,6 @@
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery IAntiforgery
 
-@model FullPlaylistViewModel;
+@model SpotifyPlaylistSorter.Business.Models.FullPlaylistViewModel;
 @{
     var antiForgeryToken = IAntiforgery.GetAndStoreTokens(Context).RequestToken;
     ViewData["Title"] = "User Playlists";

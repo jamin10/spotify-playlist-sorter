@@ -1,8 +1,9 @@
 ﻿using SpotifyAPI.Web;
-using SpotifyPlaylistSorterWeb.Services.Interfaces;
 using SpAPI = SpotifyAPI.Web;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 
-namespace SpotifyPlaylistSorterWeb.Services.Implementations;
+namespace SpotifyPlaylistSorter.Business.Services;
 
 public class SpotifyService : ISpotifyService
 {
@@ -48,9 +49,10 @@ public class SpotifyService : ISpotifyService
         new SpAPI.AuthorizationCodeTokenRequest(ClientId, ClientSecret, code, RedirectUri));
 
         var session = _httpContextAccessor.HttpContext.Session;
-        session.SetString("access_token", response.AccessToken);
+        session.Set("access_token", System.Text.Encoding.UTF8.GetBytes(response.AccessToken));
 
-        SpotifyClient = new SpotifyClient(session.GetString("access_token"));
+        var val = session.TryGetValue("access_token", out var accessToken);
+        SpotifyClient = new SpotifyClient(System.Text.Encoding.UTF8.GetString(accessToken));
 
         /*
         var config = SpAPI.SpotifyClientConfig

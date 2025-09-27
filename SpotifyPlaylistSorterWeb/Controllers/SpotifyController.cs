@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyAPI.Web;
-using SpotifyPlaylistSorterWeb.Services.Interfaces;
+using SpotifyPlaylistSorter.Business.Services;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace SpotifyPlaylistSorterWeb.Controllers

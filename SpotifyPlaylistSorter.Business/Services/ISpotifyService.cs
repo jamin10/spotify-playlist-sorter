@@ -1,6 +1,6 @@
 ﻿using SpotifyAPI.Web;
 
-namespace SpotifyPlaylistSorterWeb.Services.Interfaces;
+namespace SpotifyPlaylistSorter.Business.Services;
 
 public interface ISpotifyService
 {

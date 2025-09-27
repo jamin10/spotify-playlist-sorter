@@ -1,8 +1,6 @@
 using AutoMapper;
-using AutoMapper.Execution;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using SpotifyAPI.Web;
-using SpotifyPlaylistSorterWeb.Models;
+using SpotifyPlaylistSorter.Business.Models;
 
 namespace SpotifyPlaylistSorterWeb.Mappers;
 

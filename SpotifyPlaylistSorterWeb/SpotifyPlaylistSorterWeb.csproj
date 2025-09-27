@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <ProjectReference Include="../Common/Common.csproj" />
+    <ProjectReference Include="../SpotifyPlaylistSorter.Business/SpotifyPlaylistSorter.Business.csproj" />
+    <ProjectReference Include="../SpotifyPlaylistSorter.Domain/SpotifyPlaylistSorter.Domain.csproj" />
   </ItemGroup>
 
 </Project>
