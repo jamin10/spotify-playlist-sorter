@@ -2,62 +2,32 @@ using System.Text.Json;
 using SpotifyPlaylistSorter.Common.Models.QueueMessages;
 using SpotifyPlaylistSorter.Business.Clients.Interfaces;
 using SpotifyPlaylistSorter.Business.Models.Cyanite;
+using SpotifyPlaylistSorter.Business.Models;
 
 namespace SpotifyPlaylistSorter.Business.Services;
 
 public class PlaylistAnalyserService : IAnalyserService
 {
-    private readonly ICyaniteClient _cyaniteClient;
-    //private readonly ISpotifyService _spotifyService;
+    private readonly ICyaniteService _cyaniteService;
+    private readonly ISpotifyService _spotifyService;
 
-    public PlaylistAnalyserService(ICyaniteClient cyaniteClient)
+    public PlaylistAnalyserService(ICyaniteService cyaniteService, ISpotifyService spotifyService)
     {
-        _cyaniteClient = cyaniteClient;
-        //_spotifyService = spotifyService;
+        _cyaniteService = cyaniteService;
+        _spotifyService = spotifyService;
+        _spotifyService.AuthenticateWithClientCredentialsAsync();
     }
     public async Task<bool> Analyse(AnalysePlaylist message)
     {
         foreach (var trackId in message.TrackIds)
         {
-            var variables = new { id = trackId };
-            var response = await _cyaniteClient.GetAsync(GetCyaniteQuery(), variables);
+            var cyaniteTrack = await _cyaniteService.GetTrackAnalysis(trackId);
 
-            var result = JsonSerializer.Deserialize<CyaniteTrack>(response, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            var spotifyTrack = await _spotifyService.SpotifyClient.Tracks.Get(trackId);
 
-
+            var AnalysedTrack = new AnalysedTrack(spotifyTrack, cyaniteTrack);
         }
 
-
-
         return true;
-    }
-
-    private string GetCyaniteQuery()
-    {
-        return @"
-            query SpotifyTrackQuery($id: ID!) {
-                spotifyTrack(id: $id) {
-                    __typename
-                    ... on SpotifyTrackError {
-                        message
-                        }
-                    ... on SpotifyTrack {
-                        id
-                        title
-                        audioAnalysisV6 {
-                            __typename
-                            ... on AudioAnalysisV6Finished {
-                                result {
-                                    energyLevel
-                                    energyDynamics
-                                    bpmPrediction {
-                                        value
-                                        confidence
-                                        }
-                                    bpmRangeAdjusted
-                                    }}}}}}";
     }
 }

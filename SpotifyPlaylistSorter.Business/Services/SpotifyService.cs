@@ -61,4 +61,12 @@ public class SpotifyService : ISpotifyService
 
         Spotify = new SpAPI.SpotifyClient(config); */
     }
+
+    public async Task AuthenticateWithClientCredentialsAsync()
+{
+    var response = await new SpotifyAPI.Web.OAuthClient().RequestToken(
+        new SpotifyAPI.Web.ClientCredentialsRequest(ClientId, ClientSecret)
+    );
+    SpotifyClient = new SpotifyAPI.Web.SpotifyClient(response.AccessToken);
+}
 }

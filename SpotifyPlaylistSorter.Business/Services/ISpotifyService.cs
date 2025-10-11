@@ -9,4 +9,6 @@ public interface ISpotifyService
     public Uri GetLoginUri();
 
     public Task CreateSpotifyClient(string code);
+
+    public Task AuthenticateWithClientCredentialsAsync();
 }
