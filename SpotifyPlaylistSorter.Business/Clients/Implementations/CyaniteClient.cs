@@ -1,8 +1,8 @@
 using System.Text;
 using System.Text.Json;
-using TrackAnalysisWorker.Clients.Interfaces;
+using SpotifyPlaylistSorter.Business.Clients.Interfaces;
 
-namespace TrackAnalysisWorker.Clients.Implementations;
+namespace SpotifyPlaylistSorter.Business.Clients.Implementations;
 
 public class CyaniteClient : ICyaniteClient
 {

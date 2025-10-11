@@ -23,5 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="../Common/Common.csproj" />
+    <ProjectReference Include="../SpotifyPlaylistSorter.Business/SpotifyPlaylistSorter.Business.csproj" />
   </ItemGroup>
 </Project>

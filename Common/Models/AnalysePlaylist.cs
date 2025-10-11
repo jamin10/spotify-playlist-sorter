@@ -1,4 +1,4 @@
-namespace SpotifyPlaylistSorterWeb.Models.QueueMessages
+namespace SpotifyPlaylistSorter.Common.Models.QueueMessages
 {
     public class AnalysePlaylist : MessageBase
     {

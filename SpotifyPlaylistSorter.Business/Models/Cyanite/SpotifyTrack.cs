@@ -1,4 +1,4 @@
-namespace TrackAnalysisWorker.Models;
+namespace SpotifyPlaylistSorter.Business.Models.Cyanite;
 
 public class SpotifyTrack
 {

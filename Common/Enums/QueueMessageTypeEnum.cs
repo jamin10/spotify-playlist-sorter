@@ -1,4 +1,4 @@
-namespace SpotifyPlaylistSorterWeb.Models.Enums
+namespace SpotifyPlaylistSorter.Common.Models.Enums
 {
     public enum QueueMessageTypeEnum
     {

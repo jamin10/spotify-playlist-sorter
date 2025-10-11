@@ -1,21 +1,43 @@
 using System.Text.Json;
-using SpotifyPlaylistSorterWeb.Models.QueueMessages;
-using TrackAnalysisWorker.Clients.Interfaces;
-using TrackAnalysisWorker.Models;
+using SpotifyPlaylistSorter.Common.Models.QueueMessages;
+using SpotifyPlaylistSorter.Business.Clients.Interfaces;
+using SpotifyPlaylistSorter.Business.Models.Cyanite;
 
-namespace TrackAnalysisWorker.Services;
+namespace SpotifyPlaylistSorter.Business.Services;
 
-public class TrackAnalyserService : IAnalyserService
+public class PlaylistAnalyserService : IAnalyserService
 {
     private readonly ICyaniteClient _cyaniteClient;
+    //private readonly ISpotifyService _spotifyService;
 
-    public TrackAnalyserService(ICyaniteClient cyaniteClient)
+    public PlaylistAnalyserService(ICyaniteClient cyaniteClient)
     {
         _cyaniteClient = cyaniteClient;
+        //_spotifyService = spotifyService;
     }
     public async Task<bool> Analyse(AnalysePlaylist message)
     {
-        var query = @"
+        foreach (var trackId in message.TrackIds)
+        {
+            var variables = new { id = trackId };
+            var response = await _cyaniteClient.GetAsync(GetCyaniteQuery(), variables);
+
+            var result = JsonSerializer.Deserialize<CyaniteTrack>(response, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+
+        }
+
+
+
+        return true;
+    }
+
+    private string GetCyaniteQuery()
+    {
+        return @"
             query SpotifyTrackQuery($id: ID!) {
                 spotifyTrack(id: $id) {
                     __typename
@@ -37,18 +59,5 @@ public class TrackAnalyserService : IAnalyserService
                                         }
                                     bpmRangeAdjusted
                                     }}}}}}";
-
-        //var spotifyTrackId = "6suVCaWE1ssKwdnLJyjyxy";
-
-        var variables = new { id = message.TrackIds.First() };
-
-        var response = await _cyaniteClient.GetAsync(query, variables);
-
-        var result = JsonSerializer.Deserialize<CyaniteTrack>(response, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
-
-        return true;
     }
 }

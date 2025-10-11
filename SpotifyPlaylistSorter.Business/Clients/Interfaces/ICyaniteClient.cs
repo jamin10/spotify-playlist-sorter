@@ -1,6 +1,6 @@
-using TrackAnalysisWorker.Models;
+using SpotifyPlaylistSorter.Business.Models;
 
-namespace TrackAnalysisWorker.Clients.Interfaces;
+namespace SpotifyPlaylistSorter.Business.Clients.Interfaces;
 
 public interface ICyaniteClient
 {

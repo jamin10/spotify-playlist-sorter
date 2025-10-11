@@ -1,6 +1,6 @@
-using SpotifyPlaylistSorterWeb.Models.Enums;
+using SpotifyPlaylistSorter.Common.Models.Enums;
 
-namespace SpotifyPlaylistSorterWeb.Models.QueueMessages;
+namespace SpotifyPlaylistSorter.Common.Models.QueueMessages;
 
 public class MessageBase
 {

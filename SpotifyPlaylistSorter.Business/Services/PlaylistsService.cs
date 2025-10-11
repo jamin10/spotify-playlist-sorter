@@ -2,7 +2,7 @@ using System.Text.Json;
 using AutoMapper;
 using SpotifyAPI.Web;
 using SpotifyPlaylistSorter.Business.Models;
-using SpotifyPlaylistSorterWeb.Models.QueueMessages;
+using SpotifyPlaylistSorter.Common.Models.QueueMessages;
 
 namespace SpotifyPlaylistSorter.Business.Services;
 
