@@ -8,7 +8,8 @@ namespace SpotifyPlaylistSorter.Domain
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Playlist> Playlists { get; set; }
-        // Add other DbSets as needed
+        
+        public DbSet<Track> Tracks { get; set; }        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -2,14 +2,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SpotifyPlaylistSorter.Business.Services;
 using SpotifyPlaylistSorter.Domain;
+using SpotifyPlaylistSorterWeb.Data;
 using SpotifyPlaylistSorterWeb.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-// builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//     options.UseSqlServer(connectionString));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -17,7 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddSession(options =>
     {
         options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
