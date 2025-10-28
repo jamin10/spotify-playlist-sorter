@@ -4,6 +4,8 @@ SpotifyPlaylistSorter.Business/bin/
 SpotifyPlaylistSorter.Business/obj/
 SpotifyPlaylistSorter.Domain/bin/
 SpotifyPlaylistSorter.Domain/obj/
+SpotifyPlaylistSorter.Infrastructure/bin/
+SpotifyPlaylistSorter.Infrastructure/obj/
 TrackAnalysisWorker/bin/
 TrackAnalysisWorker/obj/
 Common/bin/
