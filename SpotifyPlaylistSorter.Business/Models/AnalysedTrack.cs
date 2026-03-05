@@ -17,10 +17,10 @@ public class AnalysedTrack
 
         AudioFeatures = new AudioFeatures
         {
-            EnergyLevel = cyaniteTrack.Data.SpotifyTrack.audioAnalysisV6.Result.EnergyLevel,
-            EnergyDynamics = cyaniteTrack.Data.SpotifyTrack.audioAnalysisV6.Result.EnergyDynamics,
-            BpmPrediction = cyaniteTrack.Data.SpotifyTrack.audioAnalysisV6.Result.BpmPrediction,
-            BpmRangeAdjusted = cyaniteTrack.Data.SpotifyTrack.audioAnalysisV6.Result.BpmRangeAdjusted
+            EnergyLevel = cyaniteTrack.Data.SpotifyTrack.AudioAnalysisV6.Result?.EnergyLevel,
+            EnergyDynamics = cyaniteTrack.Data.SpotifyTrack.AudioAnalysisV6.Result?.EnergyDynamics,
+            BpmPrediction = cyaniteTrack.Data.SpotifyTrack.AudioAnalysisV6.Result?.BpmPrediction,
+            BpmRangeAdjusted = cyaniteTrack.Data.SpotifyTrack.AudioAnalysisV6.Result?.BpmRangeAdjusted
         };
     }
 

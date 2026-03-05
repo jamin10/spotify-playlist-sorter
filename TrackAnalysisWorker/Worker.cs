@@ -55,6 +55,8 @@ public class Worker : BackgroundService
             var message = await _channel.BasicConsumeAsync(queue: "message",
                                   autoAck: false,
                                   consumer: consumer);
+
+            Thread.Sleep(1000);
         }
     }
 }
