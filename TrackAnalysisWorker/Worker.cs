@@ -12,12 +12,12 @@ public class Worker : BackgroundService
     private IConnection _connection;
     private IChannel _channel;
     private readonly ILogger<Worker> _logger;
-    private readonly IAnalyserService _analyserService;
+    private readonly IServiceScopeFactory _scopeFactory;
 
-    public Worker(ILogger<Worker> logger, IAnalyserService analyserService)
+    public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory)
     {
         _logger = logger;
-        _analyserService = analyserService;
+        _scopeFactory = scopeFactory;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -29,7 +29,7 @@ public class Worker : BackgroundService
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             }
 
-            var factory = new ConnectionFactory() { HostName = "localhost" }; // Or your actual host
+            var factory = new ConnectionFactory() { HostName = "localhost" };
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 
@@ -47,12 +47,14 @@ public class Worker : BackgroundService
                 var message = JsonSerializer.Deserialize<AnalysePlaylist>(messageBody);
                 _logger.LogInformation(" [x] Received: {message}", message);
 
-                await _analyserService.Analyse(message);
+                using var scope = _scopeFactory.CreateScope();
+                var analyserService = scope.ServiceProvider.GetRequiredService<IAnalyserService>();
+                await analyserService.Analyse(message);
 
                 await ((AsyncDefaultBasicConsumer)sender).Channel.BasicAckAsync(eventArgs.DeliveryTag, multiple: false);
             };
 
-            var message = await _channel.BasicConsumeAsync(queue: "message",
+            await _channel.BasicConsumeAsync(queue: "message",
                                   autoAck: false,
                                   consumer: consumer);
 

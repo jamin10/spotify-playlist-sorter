@@ -1,5 +1,6 @@
 using AutoMapper;
 using SpotifyAPI.Web;
+using SpotifyPlaylistSorter.Business.Dtos;
 using SpotifyPlaylistSorter.Business.Models;
 
 namespace SpotifyPlaylistSorterWeb.Mappers;
@@ -18,7 +19,7 @@ public class MappingProfile : Profile
         CreateMap<IPlayableItem, TrackModel>()
             .Include<FullTrack, TrackModel>();
 
-        CreateMap<SimpleArtist, ArtistModel>()
+        CreateMap<SimpleArtist, ArtistDto>()
             .ForMember(dest => dest.SpotifyArtistId, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
 
