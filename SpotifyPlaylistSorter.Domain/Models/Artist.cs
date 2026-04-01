@@ -1,11 +1,10 @@
 namespace SpotifyPlaylistSorter.Domain.Models;
 
-public class Playlist
+public class Artist
 {
     public int Id { get; set; }
-    public string SpotifyPlaylistId { get; set; } = string.Empty;
+    public string SpotifyArtistId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
-    public string? ImageUrl { get; set; }
     public ICollection<Track> Tracks { get; set; } = [];
+    public ICollection<Album> Albums { get; set; } = [];
 }

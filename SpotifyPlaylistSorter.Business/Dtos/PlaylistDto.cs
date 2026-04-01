@@ -1,6 +1,6 @@
-namespace SpotifyPlaylistSorter.Business.Models;
+namespace SpotifyPlaylistSorter.Business.Dtos;
 
-public class FullPlaylistModel
+public class PlaylistDto
 {    
     public string? Name { get; set; }
 
@@ -12,7 +12,7 @@ public class FullPlaylistModel
 
     public int? TracksTotal { get; set; }
     
-    public string? SpotifyId { get; set; }
+    public string? SpotifyPlaylistId { get; set; }
 
-    //public PaginatedList<TrackModel>? Tracks { get; set; }
+    public List<AnalysedTrackDto>? Tracks { get; set; }
 }

@@ -1,10 +1,15 @@
 using TrackAnalysisWorker;
+using Microsoft.EntityFrameworkCore;
 using SpotifyPlaylistSorter.Business.Clients.Interfaces;
 using SpotifyPlaylistSorter.Business.Clients.Implementations;
 using SpotifyPlaylistSorter.Business.Services;
+using SpotifyPlaylistSorter.Domain;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHttpClient<ICyaniteClient, CyaniteClient>(client =>
 {
