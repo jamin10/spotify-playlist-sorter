@@ -97,7 +97,8 @@ public class PlaylistsService : IPlaylistsService
             allTrackIds.AddRange(
                 tracks.Items
                     .Select(t => t.Track as FullTrack)
-                    .Where(ft => ft != null)
+                    .Where(ft => ft != null
+                            && ft.Id != null)
                     .Select(ft => ft.Id)
             );
 
