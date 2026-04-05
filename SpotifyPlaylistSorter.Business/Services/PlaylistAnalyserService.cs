@@ -1,150 +1,153 @@
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SpotifyPlaylistSorter.Business.Dtos;
+using SpotifyPlaylistSorter.Business.Mappers;
 using SpotifyPlaylistSorter.Common.Models.QueueMessages;
-using SpotifyPlaylistSorter.Domain;
 using DomainModels = SpotifyPlaylistSorter.Domain.Models;
 
 namespace SpotifyPlaylistSorter.Business.Services;
 
-public class PlaylistAnalyserService : IAnalyserService
+public class PlaylistAnalyserService(
+    ICyaniteService _cyaniteService,
+    ISpotifyService _spotifyService,
+    ITrackStore _store,
+    ILogger<PlaylistAnalyserService> _logger) : IAnalyserService
 {
-    private readonly ICyaniteService _cyaniteService;
-    private readonly ISpotifyService _spotifyService;
-    private readonly AppDbContext _dbContext;
-
-    public PlaylistAnalyserService(ICyaniteService cyaniteService, ISpotifyService spotifyService, AppDbContext dbContext)
-    {
-        _cyaniteService = cyaniteService;
-        _spotifyService = spotifyService;
-        _spotifyService.AuthenticateWithClientCredentialsAsync();
-        _dbContext = dbContext;
-    }
 
     public async Task<bool> Analyse(AnalysePlaylist message)
     {
-        // Load existing tracks from DB in one query
-        var existingTracks = await _dbContext.Tracks
-            .Include(t => t.Artists)
-            .Include(t => t.Playlists)
-            .Where(t => message.TrackIds.Contains(t.SpotifyTrackId))
-            .ToListAsync();
+        var allTracks = await LoadAndFetchTracksAsync(message);
+        var playlist = await ResolvePlaylistAsync(message.PlaylistId);
+        LinkTracksToPlaylist(allTracks, playlist);
+        await _store.SaveChangesAsync();
+        return true;
+    }
 
+    private async Task<List<DomainModels.Track>> LoadAndFetchTracksAsync(AnalysePlaylist message)
+    {
+        var existingTracks = await _store.GetExistingTracksAsync(message.TrackIds);
         var existingTrackIds = existingTracks.Select(t => t.SpotifyTrackId).ToHashSet();
         var trackIdsToAnalyse = message.TrackIds.Where(id => !existingTrackIds.Contains(id)).ToList();
 
-        // Only call Spotify/Cyanite for tracks not already in the DB
-        var analysedTracks = new List<AnalysedTrackDto>();
-        foreach (var trackId in trackIdsToAnalyse)
+        var newTracks = await FetchAndPersistNewTracksAsync(trackIdsToAnalyse);
+        return [.. existingTracks, .. newTracks];
+    }
+
+    private async Task<List<DomainModels.Track>> FetchAndPersistNewTracksAsync(List<string> trackIds)
+    {
+        var artistCache = new Dictionary<string, DomainModels.Artist>();
+        var albumCache = new Dictionary<string, DomainModels.Album>();
+        var tracks = new List<DomainModels.Track>();
+
+        foreach (var trackId in trackIds)
         {
-            try
-            {
-                var cyaniteTrack = await _cyaniteService.GetTrackAnalysis(trackId);
-                var spotifyTrack = await _spotifyService.SpotifyClient.Tracks.Get(trackId);
-                analysedTracks.Add(new AnalysedTrackDto(spotifyTrack, cyaniteTrack));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to analyse track {trackId}: {ex.Message}");
-            }
+            var dto = await FetchAnalysedTrackAsync(trackId);
+            if (dto is null) continue;
+
+            var album = await ResolveAlbumAsync(dto.Album, albumCache, artistCache);
+            var artists = await ResolveArtistsAsync(dto.Artists, artistCache);
+            var track = TrackEntityMapper.ToTrack(dto, album, artists);
+            _store.Add(track);
+            tracks.Add(track);
         }
 
-        // Find or create the playlist
-        var playlist = await _dbContext.Playlists
-            .Include(p => p.Tracks)
-            .FirstOrDefaultAsync(p => p.SpotifyPlaylistId == message.PlaylistId);
+        return tracks;
+    }
 
-        if (playlist is null)
+    private async Task<AnalysedTrackDto?> FetchAnalysedTrackAsync(string trackId)
+    {
+        try
         {
-            var spotifyPlaylist = await _spotifyService.SpotifyClient.Playlists.Get(message.PlaylistId);
-            playlist = new DomainModels.Playlist
-            {
-                SpotifyPlaylistId = message.PlaylistId,
-                Name = spotifyPlaylist.Name ?? string.Empty,
-                Description = spotifyPlaylist.Description,
-                ImageUrl = spotifyPlaylist.Images?.FirstOrDefault()?.Url
-            };
-            _dbContext.Playlists.Add(playlist);
+            var spotifyTrack = await _spotifyService.GetTrackAsync(trackId);
+            var cyaniteTrack = await _cyaniteService.GetTrackAnalysis(trackId);
+            return new AnalysedTrackDto(spotifyTrack, cyaniteTrack);
         }
-
-        // Persist newly analysed tracks
-        foreach (var dto in analysedTracks)
+        catch (Exception ex)
         {
-            var album = await ResolveAlbumAsync(dto.Album);
-
-            var artists = new List<DomainModels.Artist>();
-            foreach (var artistDto in dto.Artists)
-                artists.Add(await ResolveArtistAsync(artistDto.SpotifyArtistId, artistDto.Name));
-
-            var track = new DomainModels.Track
-            {
-                SpotifyTrackId = dto.SpotifyTrackId,
-                Title = dto.Title,
-                Album = album,
-                Artists = artists,
-                AudioFeatures = new DomainModels.TrackAudioFeatures
-                {
-                    EnergyLevel = dto.AudioFeatures.EnergyLevel,
-                    EnergyDynamics = dto.AudioFeatures.EnergyDynamics,
-                    Bpm = dto.AudioFeatures.Bpm,
-                    BpmRangeAdjusted = dto.AudioFeatures.BpmRangeAdjusted
-                }
-            };
-            _dbContext.Tracks.Add(track);
-            existingTracks.Add(track);
+            _logger.LogWarning(ex, "Failed to analyse track {TrackId}", trackId);
+            return null;
         }
+    }
 
-        // Associate all tracks (new and existing) with the playlist
-        foreach (var track in existingTracks)
+    private async Task<DomainModels.Playlist> ResolvePlaylistAsync(string spotifyPlaylistId)
+    {
+        var playlist = await _store.FindPlaylistAsync(spotifyPlaylistId);
+        if (playlist is not null)
+            return playlist;
+
+        var spotifyPlaylist = await _spotifyService.GetPlaylistAsync(spotifyPlaylistId);
+        playlist = new DomainModels.Playlist
+        {
+            SpotifyPlaylistId = spotifyPlaylist.SpotifyPlaylistId,
+            Name = spotifyPlaylist.Name,
+            Description = spotifyPlaylist.Description,
+            ImageUrl = spotifyPlaylist.ImageUrl
+        };
+        _store.Add(playlist);
+        return playlist;
+    }
+
+    private static void LinkTracksToPlaylist(List<DomainModels.Track> tracks, DomainModels.Playlist playlist)
+    {
+        foreach (var track in tracks)
         {
             if (!track.Playlists.Contains(playlist))
                 track.Playlists.Add(playlist);
         }
-
-        await _dbContext.SaveChangesAsync();
-        return true;
     }
 
-    private async Task<DomainModels.Album> ResolveAlbumAsync(AlbumModelDto albumDto)
+    private async Task<List<DomainModels.Artist>> ResolveArtistsAsync(
+        List<ArtistDto> artistDtos,
+        Dictionary<string, DomainModels.Artist> artistCache)
     {
-        var album = _dbContext.ChangeTracker.Entries<DomainModels.Album>()
-            .FirstOrDefault(e => e.Entity.SpotifyId == albumDto.SpotifyId)?.Entity
-            ?? await _dbContext.Albums
-                .Include(a => a.Artists)
-                .FirstOrDefaultAsync(a => a.SpotifyId == albumDto.SpotifyId);
-
-        if (album is not null)
-            return album;
-
         var artists = new List<DomainModels.Artist>();
-        foreach (var artistDto in albumDto.Artists)
-            artists.Add(await ResolveArtistAsync(artistDto.SpotifyArtistId, artistDto.Name));
+        foreach (var dto in artistDtos)
+            artists.Add(await ResolveArtistAsync(dto.SpotifyArtistId, dto.Name, artistCache));
+        return artists;
+    }
 
-        album = new DomainModels.Album
+    private async Task<DomainModels.Album> ResolveAlbumAsync(
+        AlbumModelDto albumDto,
+        Dictionary<string, DomainModels.Album> albumCache,
+        Dictionary<string, DomainModels.Artist> artistCache)
+    {
+        if (albumCache.TryGetValue(albumDto.SpotifyId, out var cached))
+            return cached;
+
+        var album = await _store.FindAlbumAsync(albumDto.SpotifyId);
+        if (album is null)
         {
-            SpotifyId = albumDto.SpotifyId,
-            Name = albumDto.Name,
-            Artists = artists
-        };
-        _dbContext.Albums.Add(album);
+            var artists = new List<DomainModels.Artist>();
+            foreach (var artistDto in albumDto.Artists)
+                artists.Add(await ResolveArtistAsync(artistDto.SpotifyArtistId, artistDto.Name, artistCache));
+
+            album = new DomainModels.Album
+            {
+                SpotifyId = albumDto.SpotifyId,
+                Name = albumDto.Name,
+                Artists = artists
+            };
+            _store.Add(album);
+        }
+
+        albumCache[albumDto.SpotifyId] = album;
         return album;
     }
 
-    private async Task<DomainModels.Artist> ResolveArtistAsync(string spotifyArtistId, string name)
+    private async Task<DomainModels.Artist> ResolveArtistAsync(
+        string spotifyArtistId,
+        string name,
+        Dictionary<string, DomainModels.Artist> artistCache)
     {
-        var artist = _dbContext.ChangeTracker.Entries<DomainModels.Artist>()
-            .FirstOrDefault(e => e.Entity.SpotifyArtistId == spotifyArtistId)?.Entity
-            ?? await _dbContext.Artists
-                .FirstOrDefaultAsync(a => a.SpotifyArtistId == spotifyArtistId);
+        if (artistCache.TryGetValue(spotifyArtistId, out var cached))
+            return cached;
 
-        if (artist is not null)
-            return artist;
+        var artist = await _store.FindArtistAsync(spotifyArtistId)
+            ?? new DomainModels.Artist { SpotifyArtistId = spotifyArtistId, Name = name };
 
-        artist = new DomainModels.Artist
-        {
-            SpotifyArtistId = spotifyArtistId,
-            Name = name
-        };
-        _dbContext.Artists.Add(artist);
+        if (artist.Id == 0)
+            _store.Add(artist);
+
+        artistCache[spotifyArtistId] = artist;
         return artist;
     }
 }

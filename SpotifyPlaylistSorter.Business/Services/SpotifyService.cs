@@ -2,6 +2,7 @@
 using SpAPI = SpotifyAPI.Web;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
+using SpotifyPlaylistSorter.Business.Dtos;
 
 namespace SpotifyPlaylistSorter.Business.Services;
 
@@ -63,10 +64,47 @@ public class SpotifyService : ISpotifyService
     }
 
     public async Task AuthenticateWithClientCredentialsAsync()
-{
-    var response = await new SpotifyAPI.Web.OAuthClient().RequestToken(
-        new SpotifyAPI.Web.ClientCredentialsRequest(ClientId, ClientSecret)
-    );
-    SpotifyClient = new SpotifyAPI.Web.SpotifyClient(response.AccessToken);
-}
+    {
+        var response = await new SpotifyAPI.Web.OAuthClient().RequestToken(
+            new SpotifyAPI.Web.ClientCredentialsRequest(ClientId, ClientSecret)
+        );
+        SpotifyClient = new SpotifyAPI.Web.SpotifyClient(response.AccessToken);
+    }
+
+    public async Task<SpotifyTrackDto> GetTrackAsync(string trackId)
+    {
+        if (SpotifyClient is null)
+            await AuthenticateWithClientCredentialsAsync();
+
+        var track = await SpotifyClient!.Tracks.Get(trackId);
+        return new SpotifyTrackDto(
+            SpotifyTrackId: track.Id,
+            Title: track.Name,
+            Album: new AlbumModelDto
+            {
+                SpotifyId = track.Album.Id,
+                Name = track.Album.Name,
+                Artists = track.Album.Artists
+                    .Select(a => new ArtistDto { SpotifyArtistId = a.Id ?? string.Empty, Name = a.Name })
+                    .ToList()
+            },
+            Artists: track.Artists
+                .Select(a => new ArtistDto { SpotifyArtistId = a.Id ?? string.Empty, Name = a.Name })
+                .ToList()
+        );
+    }
+
+    public async Task<SpotifyPlaylistDto> GetPlaylistAsync(string playlistId)
+    {
+        if (SpotifyClient is null)
+            await AuthenticateWithClientCredentialsAsync();
+
+        var playlist = await SpotifyClient!.Playlists.Get(playlistId);
+        return new SpotifyPlaylistDto(
+            SpotifyPlaylistId: playlistId,
+            Name: playlist.Name ?? string.Empty,
+            Description: playlist.Description,
+            ImageUrl: playlist.Images?.FirstOrDefault()?.Url
+        );
+    }
 }

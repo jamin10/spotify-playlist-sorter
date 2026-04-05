@@ -1,22 +1,15 @@
-
-using SpotifyAPI.Web;
 using SpotifyPlaylistSorter.Business.Models.Cyanite;
 
 namespace SpotifyPlaylistSorter.Business.Dtos;
 
 public class AnalysedTrackDto
 {
-    public AnalysedTrackDto(FullTrack fullTrack, CyaniteTrack cyaniteTrack)
+    public AnalysedTrackDto(SpotifyTrackDto spotifyTrack, CyaniteTrack cyaniteTrack)
     {
-        Title = fullTrack.Name;
-        Artists = fullTrack.Artists.Select(a => new ArtistDto { Name = a.Name, SpotifyArtistId = a.Id ?? string.Empty }).ToList();
-        SpotifyTrackId = fullTrack.Id;
-        Album = new AlbumModelDto
-        {
-            SpotifyId = fullTrack.Album.Id,
-            Name = fullTrack.Album.Name,
-            Artists = fullTrack.Album.Artists.Select(a => new ArtistDto { Name = a.Name, SpotifyArtistId = a.Id ?? string.Empty }).ToList()
-        };
+        Title = spotifyTrack.Title;
+        Artists = spotifyTrack.Artists;
+        SpotifyTrackId = spotifyTrack.SpotifyTrackId;
+        Album = spotifyTrack.Album;
         AudioFeatures = new AudioFeatures
         {
             EnergyLevel = cyaniteTrack.Data.SpotifyTrack.AudioAnalysisV6.Result?.EnergyLevel,

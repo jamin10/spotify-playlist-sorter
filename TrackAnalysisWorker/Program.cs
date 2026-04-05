@@ -18,6 +18,7 @@ builder.Services.AddHttpClient<ICyaniteClient, CyaniteClient>(client =>
         new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", builder.Configuration.GetValue<string>("Cyanite:AccessToken"));
 });
 builder.Services.AddTransient<ICyaniteService, CyaniteService>();
+builder.Services.AddTransient<ITrackStore, TrackStore>();
 builder.Services.AddTransient<IAnalyserService, PlaylistAnalyserService>();
 builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
 builder.Services.AddHttpContextAccessor();
