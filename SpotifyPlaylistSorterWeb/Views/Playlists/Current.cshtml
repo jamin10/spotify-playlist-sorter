@@ -1,0 +1,44 @@
+﻿@model SpotifyPlaylistSorterWeb.Models.PlaylistsViewModel;
+@{
+    ViewData["Title"] = "User Playlists";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this view your current playlists.</p>
+
+@if (!Model.IsLoggedIn)
+{
+    <h3>You are not connected to a Spotify account</h3>
+    <a href="Spotify/login"><button type="button" class="btn btn-success btn-spotify">Connect to Spotify</button></a>
+}
+
+@if (Model.IsLoggedIn)
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+            <th scope="col"></th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Tracks</th>
+            <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model.Playlists)
+            {
+                @if(item is null)
+                {
+                    continue;
+                }
+                <tr class="table-active">
+                <th scope="row"></th>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.TracksTotal</td>
+                <td><a href="=@item.TracksUrl">View</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

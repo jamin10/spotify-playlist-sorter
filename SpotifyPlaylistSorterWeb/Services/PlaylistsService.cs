@@ -1,4 +1,5 @@
 using AutoMapper;
+using SpotifyAPI.Web;
 using SpotifyPlaylistSorterWeb.Models;
 using SpotifyPlaylistSorterWeb.Services.Interfaces;
 
@@ -15,10 +16,24 @@ public class PlaylistsService : IPlaylistsService
         _mapper = mapper;
     }
 
+    /// <inheritdoc />
     public async Task<PlaylistsViewModel> GetPlaylistsViewModel()
     {
-        var playlists = await _spotifyService.SpotifyClient.Playlists.CurrentUsers();
         var viewModel = new PlaylistsViewModel();
+                if (_spotifyService.SpotifyClient == null)
+        {
+            return viewModel;
+        }
+        viewModel.IsLoggedIn = true;
+
+        var request = new PlaylistCurrentUsersRequest { Limit = 10 };
+        var playlists = await _spotifyService.SpotifyClient.Playlists.CurrentUsers(request);
+        // var audioFeatures = await _spotifyService.SpotifyClient.Tracks.GetAudioFeatures("11dFghVXANMlKmJXsNCbNl");
+        if (playlists != null)
+        {
+            _mapper.Map(playlists, viewModel);
+        }
+        
         return viewModel;
     }
 }
