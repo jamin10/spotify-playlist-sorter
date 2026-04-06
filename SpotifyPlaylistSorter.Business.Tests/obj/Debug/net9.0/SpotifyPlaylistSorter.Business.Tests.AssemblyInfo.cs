@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpotifyPlaylistSorter.Business.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b0a163d625049047920347d7f9ea7890d0d15767")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6a70d59c63d0a5ebac02c554c4e095552496e53a")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpotifyPlaylistSorter.Business.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpotifyPlaylistSorter.Business.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
