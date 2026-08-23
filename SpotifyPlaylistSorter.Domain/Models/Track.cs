@@ -10,4 +10,18 @@ public class Track
     public ICollection<Artist> Artists { get; set; } = [];
     public ICollection<Playlist> Playlists { get; set; } = [];
     public TrackAudioFeatures? AudioFeatures { get; set; }
+
+    public static Track Create(
+        string spotifyTrackId,
+        string title,
+        Album album,
+        List<Artist> artists,
+        TrackAudioFeatures audioFeatures) => new()
+    {
+        SpotifyTrackId = spotifyTrackId,
+        Title = title,
+        Album = album,
+        Artists = artists,
+        AudioFeatures = audioFeatures
+    };
 }

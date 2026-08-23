@@ -7,4 +7,10 @@ public class Artist
     public string Name { get; set; } = string.Empty;
     public ICollection<Track> Tracks { get; set; } = [];
     public ICollection<Album> Albums { get; set; } = [];
+
+    public static Artist Create(string spotifyArtistId, string name) => new()
+    {
+        SpotifyArtistId = spotifyArtistId,
+        Name = name
+    };
 }

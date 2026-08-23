@@ -8,4 +8,22 @@ public class Playlist
     public string? Description { get; set; }
     public string? ImageUrl { get; set; }
     public ICollection<Track> Tracks { get; set; } = [];
+
+    public static Playlist Create(
+        string spotifyPlaylistId,
+        string name,
+        string? description,
+        string? imageUrl) => new()
+    {
+        SpotifyPlaylistId = spotifyPlaylistId,
+        Name = name,
+        Description = description,
+        ImageUrl = imageUrl
+    };
+
+    public void AddTrack(Track track)
+    {
+        if (!Tracks.Contains(track))
+            Tracks.Add(track);
+    }
 }

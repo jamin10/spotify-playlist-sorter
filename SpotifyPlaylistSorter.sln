@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyPlaylistSorter.Busin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyPlaylistSorter.Domain", "SpotifyPlaylistSorter.Domain\SpotifyPlaylistSorter.Domain.csproj", "{B09AE66C-CB44-4130-ADED-3E42C59FFEFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyPlaylistSorter.Infrastructure", "SpotifyPlaylistSorter.Infrastructure\SpotifyPlaylistSorter.Infrastructure.csproj", "{CC4CDF1D-3937-4D8B-A3D9-248834289657}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyPlaylistSorter.Business.Tests", "SpotifyPlaylistSorter.Business.Tests\SpotifyPlaylistSorter.Business.Tests.csproj", "{6141494F-E1F2-4CF1-A075-69BBAE6BEC7D}"
 EndProject
 Global
@@ -87,18 +85,6 @@ Global
 		{B09AE66C-CB44-4130-ADED-3E42C59FFEFC}.Release|x64.Build.0 = Release|Any CPU
 		{B09AE66C-CB44-4130-ADED-3E42C59FFEFC}.Release|x86.ActiveCfg = Release|Any CPU
 		{B09AE66C-CB44-4130-ADED-3E42C59FFEFC}.Release|x86.Build.0 = Release|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Debug|x64.Build.0 = Debug|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Debug|x86.Build.0 = Debug|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Release|x64.ActiveCfg = Release|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Release|x64.Build.0 = Release|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Release|x86.ActiveCfg = Release|Any CPU
-		{CC4CDF1D-3937-4D8B-A3D9-248834289657}.Release|x86.Build.0 = Release|Any CPU
 		{6141494F-E1F2-4CF1-A075-69BBAE6BEC7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6141494F-E1F2-4CF1-A075-69BBAE6BEC7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6141494F-E1F2-4CF1-A075-69BBAE6BEC7D}.Debug|x64.ActiveCfg = Debug|Any CPU

@@ -127,7 +127,7 @@ public class PlaylistAnalyserServiceTests
         await _sut.Analyse(new AnalysePlaylist("playlist1", ["existing", "new-track"]));
 
         Assert.IsNotNull(createdPlaylist);
-        Assert.IsTrue(existingTrack.Playlists.Contains(createdPlaylist),
+        Assert.IsTrue(createdPlaylist!.Tracks.Contains(existingTrack),
             "Existing track should be linked to the playlist");
     }
 

@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using SpotifyPlaylistSorter.Business.Dtos;
-using SpotifyPlaylistSorter.Business.Mappers;
 using SpotifyPlaylistSorter.Common.Models.QueueMessages;
 using DomainModels = SpotifyPlaylistSorter.Domain.Models;
 
@@ -45,7 +44,12 @@ public class PlaylistAnalyserService(
 
             var album = await ResolveAlbumAsync(dto.Album, albumCache, artistCache);
             var artists = await ResolveArtistsAsync(dto.Artists, artistCache);
-            var track = TrackEntityMapper.ToTrack(dto, album, artists);
+            var audioFeatures = new DomainModels.TrackAudioFeatures(
+                dto.AudioFeatures.EnergyLevel,
+                dto.AudioFeatures.EnergyDynamics,
+                dto.AudioFeatures.Bpm,
+                dto.AudioFeatures.BpmRangeAdjusted);
+            var track = DomainModels.Track.Create(dto.SpotifyTrackId, dto.Title, album, artists, audioFeatures);
             _store.Add(track);
             tracks.Add(track);
         }
@@ -75,13 +79,11 @@ public class PlaylistAnalyserService(
             return playlist;
 
         var spotifyPlaylist = await _spotifyService.GetPlaylistAsync(spotifyPlaylistId);
-        playlist = new DomainModels.Playlist
-        {
-            SpotifyPlaylistId = spotifyPlaylist.SpotifyPlaylistId,
-            Name = spotifyPlaylist.Name,
-            Description = spotifyPlaylist.Description,
-            ImageUrl = spotifyPlaylist.ImageUrl
-        };
+        playlist = DomainModels.Playlist.Create(
+            spotifyPlaylist.SpotifyPlaylistId,
+            spotifyPlaylist.Name,
+            spotifyPlaylist.Description,
+            spotifyPlaylist.ImageUrl);
         _store.Add(playlist);
         return playlist;
     }
@@ -89,10 +91,7 @@ public class PlaylistAnalyserService(
     private static void LinkTracksToPlaylist(List<DomainModels.Track> tracks, DomainModels.Playlist playlist)
     {
         foreach (var track in tracks)
-        {
-            if (!track.Playlists.Contains(playlist))
-                track.Playlists.Add(playlist);
-        }
+            playlist.AddTrack(track);
     }
 
     private async Task<List<DomainModels.Artist>> ResolveArtistsAsync(
@@ -120,12 +119,7 @@ public class PlaylistAnalyserService(
             foreach (var artistDto in albumDto.Artists)
                 artists.Add(await ResolveArtistAsync(artistDto.SpotifyArtistId, artistDto.Name, artistCache));
 
-            album = new DomainModels.Album
-            {
-                SpotifyId = albumDto.SpotifyId,
-                Name = albumDto.Name,
-                Artists = artists
-            };
+            album = DomainModels.Album.Create(albumDto.SpotifyId, albumDto.Name, artists);
             _store.Add(album);
         }
 
@@ -142,7 +136,7 @@ public class PlaylistAnalyserService(
             return cached;
 
         var artist = await _store.FindArtistAsync(spotifyArtistId)
-            ?? new DomainModels.Artist { SpotifyArtistId = spotifyArtistId, Name = name };
+            ?? DomainModels.Artist.Create(spotifyArtistId, name);
 
         if (artist.Id == 0)
             _store.Add(artist);
