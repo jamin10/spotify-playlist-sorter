@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using SpotifyPlaylistSorter.Business.Services;
+using SpotifyPlaylistSorterWeb.Filters;
 
 namespace SpotifyPlaylistSorterWeb.Controllers;
 
+[RequireSpotifyLogin]
 public class PlaylistsController : Controller
 {
     private readonly ILogger<PlaylistsController> _logger;

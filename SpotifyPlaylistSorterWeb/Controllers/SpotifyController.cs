@@ -1,19 +1,15 @@
-﻿using System.Configuration;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using SpotifyAPI.Web;
 using SpotifyPlaylistSorter.Business.Services;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace SpotifyPlaylistSorterWeb.Controllers
 {
     public class SpotifyController : Controller
     {
-        private readonly ISpotifyService _spotifyService;
+        private readonly ISpotifySessionAuth _sessionAuth;
 
-        public SpotifyController(ISpotifyService spotifyService)
+        public SpotifyController(ISpotifySessionAuth sessionAuth)
         {
-            _spotifyService = spotifyService;
+            _sessionAuth = sessionAuth;
         }
 
         public IActionResult Index()
@@ -23,20 +19,19 @@ namespace SpotifyPlaylistSorterWeb.Controllers
 
         public IActionResult Login()
         {
-            var uri = _spotifyService.GetLoginUri();
-            return Redirect(uri.ToString());
+            return Redirect(_sessionAuth.GetLoginUri().ToString());
         }
 
-        public async Task<IActionResult> Callback()
+        public async Task<IActionResult> Callback(string code)
         {
-            string code = Request.Query["code"];
-            await GetCallback(code);
+            await _sessionAuth.SignInAsync(code);
             return Redirect("/");
         }
-        public async Task GetCallback(string code)
+
+        public IActionResult Logout()
         {
-            await _spotifyService.CreateSpotifyClient(code); 
-            // Also important for later: response.RefreshToken
+            _sessionAuth.SignOut();
+            return Redirect("/");
         }
     }
 }

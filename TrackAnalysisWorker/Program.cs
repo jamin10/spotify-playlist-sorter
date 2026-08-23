@@ -20,8 +20,8 @@ builder.Services.AddHttpClient<ICyaniteClient, CyaniteClient>(client =>
 builder.Services.AddTransient<ICyaniteService, CyaniteService>();
 builder.Services.AddTransient<ITrackStore, TrackStore>();
 builder.Services.AddTransient<IAnalyserService, PlaylistAnalyserService>();
-builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<ISpotifyCredentialProvider, ClientCredentialsProvider>();
+builder.Services.AddTransient<ISpotifyService, SpotifyService>();
 
 var host = builder.Build();
 host.Run();

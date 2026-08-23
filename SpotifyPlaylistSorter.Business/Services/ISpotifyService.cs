@@ -1,19 +1,13 @@
-﻿using SpotifyAPI.Web;
 using SpotifyPlaylistSorter.Business.Dtos;
 
 namespace SpotifyPlaylistSorter.Business.Services;
 
+/// <summary>
+/// Public-data catalog lookups, used only by the Worker's analysis pipeline.
+/// </summary>
 public interface ISpotifyService
 {
-    public SpotifyClient? SpotifyClient { get; set; }
+    Task<SpotifyTrackDto> GetTrackAsync(string trackId);
 
-    public Uri GetLoginUri();
-
-    public Task CreateSpotifyClient(string code);
-
-    public Task AuthenticateWithClientCredentialsAsync();
-
-    public Task<SpotifyTrackDto> GetTrackAsync(string trackId);
-
-    public Task<SpotifyPlaylistDto> GetPlaylistAsync(string playlistId);
+    Task<SpotifyPlaylistDto> GetPlaylistAsync(string playlistId);
 }

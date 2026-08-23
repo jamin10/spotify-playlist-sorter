@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SpotifyPlaylistSorter.Business.Services;
@@ -28,7 +29,13 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<ISpotifyService, SpotifyService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ISession>(sp => sp.GetRequiredService<IHttpContextAccessor>().HttpContext!.Session);
+builder.Services.AddScoped<SessionSpotifyCredentialProvider>();
+builder.Services.AddScoped<ISpotifyCredentialProvider>(sp => sp.GetRequiredService<SessionSpotifyCredentialProvider>());
+builder.Services.AddScoped<ISpotifySessionAuth>(sp => sp.GetRequiredService<SessionSpotifyCredentialProvider>());
+builder.Services.AddScoped<ISpotifyUserContext, SpotifyUserContext>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<IPlaylistsService, PlaylistsService>();
 builder.Services.AddScoped<IMessageQueueService, RabbitMQService>();
