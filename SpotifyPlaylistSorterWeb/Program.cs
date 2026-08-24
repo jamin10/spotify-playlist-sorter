@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SpotifyPlaylistSorter.Business.Configuration;
 using SpotifyPlaylistSorter.Business.Services;
 using SpotifyPlaylistSorter.Domain;
 using SpotifyPlaylistSorterWeb.Data;
@@ -38,7 +39,9 @@ builder.Services.AddScoped<ISpotifySessionAuth>(sp => sp.GetRequiredService<Sess
 builder.Services.AddScoped<ISpotifyUserContext, SpotifyUserContext>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<IPlaylistsService, PlaylistsService>();
-builder.Services.AddScoped<IMessageQueueService, RabbitMQService>();
+
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMQ"));
+builder.Services.AddSingleton<IMessageBroker, RabbitMqMessageBroker>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

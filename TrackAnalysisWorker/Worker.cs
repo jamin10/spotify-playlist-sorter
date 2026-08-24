@@ -1,7 +1,4 @@
-using System.Text;
 using System.Text.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using SpotifyPlaylistSorter.Business.Services;
 using SpotifyPlaylistSorter.Common.Models.QueueMessages;
 
@@ -9,56 +6,27 @@ namespace TrackAnalysisWorker;
 
 public class Worker : BackgroundService
 {
-    private IConnection _connection;
-    private IChannel _channel;
     private readonly ILogger<Worker> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
+    private readonly IMessageBroker _messageBroker;
 
-    public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory)
+    public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory, IMessageBroker messageBroker)
     {
         _logger = logger;
         _scopeFactory = scopeFactory;
+        _messageBroker = messageBroker;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override Task ExecuteAsync(CancellationToken stoppingToken) =>
+        _messageBroker.SubscribeAsync(HandleMessageAsync, stoppingToken);
+
+    private async Task HandleMessageAsync(string messageBody, CancellationToken cancellationToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            if (_logger.IsEnabled(LogLevel.Information))
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }
+        var message = JsonSerializer.Deserialize<AnalysePlaylist>(messageBody);
+        _logger.LogInformation(" [x] Received: {message}", message);
 
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            _connection = await factory.CreateConnectionAsync();
-            _channel = await _connection.CreateChannelAsync();
-
-            await _channel.QueueDeclareAsync(queue: "message",
-                                  durable: false,
-                                  exclusive: false,
-                                  autoDelete: false,
-                                  arguments: null);
-
-            var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.ReceivedAsync += async (sender, eventArgs) =>
-            {
-                byte[] body = eventArgs.Body.ToArray();
-                var messageBody = Encoding.UTF8.GetString(body);
-                var message = JsonSerializer.Deserialize<AnalysePlaylist>(messageBody);
-                _logger.LogInformation(" [x] Received: {message}", message);
-
-                using var scope = _scopeFactory.CreateScope();
-                var analyserService = scope.ServiceProvider.GetRequiredService<IAnalyserService>();
-                await analyserService.Analyse(message);
-
-                await ((AsyncDefaultBasicConsumer)sender).Channel.BasicAckAsync(eventArgs.DeliveryTag, multiple: false);
-            };
-
-            await _channel.BasicConsumeAsync(queue: "message",
-                                  autoAck: false,
-                                  consumer: consumer);
-
-            Thread.Sleep(1000);
-        }
+        using var scope = _scopeFactory.CreateScope();
+        var analyserService = scope.ServiceProvider.GetRequiredService<IAnalyserService>();
+        await analyserService.Analyse(message);
     }
 }

@@ -2,11 +2,15 @@ using TrackAnalysisWorker;
 using Microsoft.EntityFrameworkCore;
 using SpotifyPlaylistSorter.Business.Clients.Interfaces;
 using SpotifyPlaylistSorter.Business.Clients.Implementations;
+using SpotifyPlaylistSorter.Business.Configuration;
 using SpotifyPlaylistSorter.Business.Services;
 using SpotifyPlaylistSorter.Domain;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
+
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMQ"));
+builder.Services.AddSingleton<IMessageBroker, RabbitMqMessageBroker>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

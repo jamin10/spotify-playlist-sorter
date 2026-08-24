@@ -7,14 +7,14 @@ namespace SpotifyPlaylistSorter.Business.Services;
 public class PlaylistsService : IPlaylistsService
 {
     private readonly ISpotifyUserContext _spotifyUserContext;
-    private readonly IMessageQueueService _messageQueueService;
+    private readonly IMessageBroker _messageBroker;
 
     public PlaylistsService(
         ISpotifyUserContext spotifyUserContext,
-        IMessageQueueService messageQueueService)
+        IMessageBroker messageBroker)
     {
         _spotifyUserContext = spotifyUserContext;
-        _messageQueueService = messageQueueService;
+        _messageBroker = messageBroker;
     }
 
     /// <inheritdoc />
@@ -56,7 +56,7 @@ public class PlaylistsService : IPlaylistsService
         {
             var batch = allTrackIds.Skip(i).Take(10).ToList();
             var message = new AnalysePlaylist(playlistId, batch);
-            await _messageQueueService.SendMessage(JsonSerializer.Serialize(message));
+            await _messageBroker.PublishAsync(JsonSerializer.Serialize(message));
         }
     }
 }
